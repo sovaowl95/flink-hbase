@@ -1,0 +1,55 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="hbase" type="docker-deploy" factoryName="docker-image" server-name="Docker">
+    <deployment type="docker-image">
+      <settings>
+        <option name="imageTag" value="dajobe/hbase" />
+        <option name="containerName" value="dajobe_hbase" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="16010" />
+              <option name="hostPort" value="16010" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="16020" />
+              <option name="hostPort" value="16020" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="2181" />
+              <option name="hostPort" value="2181" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="8080" />
+              <option name="hostPort" value="8080" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="8085" />
+              <option name="hostPort" value="8085" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="9090" />
+              <option name="hostPort" value="9090" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="9095" />
+              <option name="hostPort" value="9095" />
+            </DockerPortBindingImpl>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="16000" />
+              <option name="hostPort" value="16000" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="\data" />
+              <option name="hostPath" value="C:\docker\hbase" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
