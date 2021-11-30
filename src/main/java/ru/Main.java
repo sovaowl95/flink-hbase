@@ -1,42 +1,47 @@
 package ru;
 
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.connector.hbase.sink.HBaseMutationConverter;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import ru.client.HBaseClientV2;
-import ru.migration.MigrationV1;
-import ru.sink.MySinc;
-import ru.table.HvacTable;
+import ru.sink.MockTableMutationConverter;
+import ru.sink.MockTableSink;
+import ru.table.MockTable;
 
+@Slf4j
 public class Main {
   public static void main(String[] args) throws Exception {
-    HBaseClientV2 hBaseClientV2 = new HBaseClientV2();
-    hBaseClientV2.setUp();
+    final Configuration configuration = createConfiguration();
 
-    initMigrations(hBaseClientV2);
-
-//    hBaseClientV2.write(HvacTable.TABLE_NAME, src);
-//    hBaseClientV2.readAll(HvacTable.TABLE_NAME);
-//    hBaseClientV2.close();
+    final HBaseClientV2 hBaseClientV2 = new HBaseClientV2(configuration);
+    MainMigrations.initMigrations(hBaseClientV2);
 
 
-    startFlink();
+    final HBaseMutationConverter mutationConverter = new MockTableMutationConverter();
+    final MockTableSink mockTableSink = new MockTableSink(MockTable.TABLE_NAME,
+                                                          configuration,
+                                                          mutationConverter,
+                                                          100,
+                                                          100,
+                                                          100); //todo: переделать на бины
+    MainFlink.startFlink(mockTableSink);
 
 
-    hBaseClientV2.readAll(HvacTable.TABLE_NAME);
+
+
+    hBaseClientV2.readAll(MockTable.TABLE_NAME);
   }
 
-  private static void initMigrations(HBaseClientV2 hBaseClientV2) throws Exception {
-    MigrationV1 migrationV1 = new MigrationV1();
-    migrationV1.migrate(hBaseClientV2);
+  private static Configuration createConfiguration() {
+    log.info("createConfiguration...");
+    final Configuration configuration = HBaseConfiguration.create();
+    configuration.set("hbase.zookeeper.quorum", "localhost");
+    configuration.set("hbase.zookeeper.property.clientPort", "2181");
+
+    log.info("createConfiguration... complete");
+    return configuration;
   }
 
-  private static void startFlink() throws Exception {
-    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-    final DataStreamSource<Long> longDataStreamSource = env.fromSequence(1, 2L);
-    longDataStreamSource.addSink(new MySinc());
-    longDataStreamSource.print();
-
-    env.execute();
-  }
 }

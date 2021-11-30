@@ -2,7 +2,6 @@ package ru.client;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
@@ -20,14 +19,10 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class HBaseClientV2 {
-  private Configuration configuration;
-  private Connection connection;
+  private final Connection connection;
 
-  public void setUp() throws IOException {
+  public HBaseClientV2(Configuration configuration) throws Exception {
     log.info("hbaseclient connection...");
-    configuration = HBaseConfiguration.create();
-    configuration.set("hbase.zookeeper.quorum", "localhost");
-    configuration.set("hbase.zookeeper.property.clientPort", "2181");
     connection = ConnectionFactory.createConnection(configuration);
     log.info("hbaseclient connection... complete");
   }
@@ -37,19 +32,19 @@ public class HBaseClientV2 {
     try (Admin admin = connection.getAdmin()) {
       TableName table = TableName.valueOf(tableName);
       if (admin.tableExists(table)) {
-        System.out.println("Table [" + tableName + "] is already existed.");
+        log.info("Table [" + tableName + "] is already existed.");
         return;
       }
 
       TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(table);
       for (String cf : columnFamilies) {
-        System.out.println("CF: " + cf);
+        log.info("CF: " + cf);
         builder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(cf));
       }
 
-      System.out.println("Creating a new table... ");
+      log.info("Creating a new table... ");
       admin.createTable(builder.build());
-      System.out.println("Done.");
+      log.info("Done.");
     }
   }
 
