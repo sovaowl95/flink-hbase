@@ -14,6 +14,9 @@ public class MockTableMutationConverter implements HBaseMutationConverter<MockTa
 
   private static final Random RANDOM = new Random();
 
+  private static final byte[] BYTES_TRUE = {1};
+  private static final byte[] BYTES_FALSE = {0};
+
   @Override
   public void open() {
     //ignore
@@ -38,7 +41,7 @@ public class MockTableMutationConverter implements HBaseMutationConverter<MockTa
                   BigInteger.valueOf(mockEntity.getAge()).toByteArray());
     put.addColumn(MockTable.ColumnFamilies.CF_SECOND.getName().getBytes(),
                   "adult".getBytes(),
-                  Boolean.TRUE.equals(mockEntity.getAdult()) ? new byte[] {1} : new byte[] {0});
+                  Boolean.TRUE.equals(mockEntity.getAdult()) ? BYTES_TRUE : BYTES_FALSE);
     return put;
   }
 

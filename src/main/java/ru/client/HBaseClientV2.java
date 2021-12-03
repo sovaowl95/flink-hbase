@@ -13,9 +13,9 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
+import ru.table.dto.iTable;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class HBaseClientV2 {
@@ -27,26 +27,25 @@ public class HBaseClientV2 {
     log.info("hbaseclient connection... complete");
   }
 
-  public void createTableIfNotExists(final String tableName,
-                                     final String... columnFamilies) throws IOException {
+  public void createTableIfNotExists(iTable iTable) throws IOException {
     try (Admin admin = connection.getAdmin()) {
-      TableName table = TableName.valueOf(tableName);
-      if (admin.tableExists(table)) {
+      TableName tableName = TableName.valueOf(iTable.getTableName());
+      if (admin.tableExists(tableName)) {
         log.info("Table [" + tableName + "] is already existed.");
-        return;
-      }
+      } else {
+        TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableName);
+        for (String cf : iTable.getColumnFamilies()) {
+          log.info("CF: " + cf);
+          builder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(cf));
+        }
 
-      TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(table);
-      for (String cf : columnFamilies) {
-        log.info("CF: " + cf);
-        builder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(cf));
+        log.info("Creating a new table... ");
+        admin.createTable(builder.build());
+        log.info("Done.");
       }
-
-      log.info("Creating a new table... ");
-      admin.createTable(builder.build());
-      log.info("Done.");
     }
   }
+
 
   public void write(String tableName, Put put) throws IOException {
     try (Table table = connection.getTable(TableName.valueOf(tableName))) {
@@ -55,8 +54,6 @@ public class HBaseClientV2 {
   }
 
   public void readAll(String tableName) throws Exception {
-    TimeUnit.SECONDS.sleep(1);
-
     log.info("read all");
     final ResultScanner resultScanner = connection.getTable(TableName.valueOf(tableName))
                                                   .getScanner(new Scan());
@@ -69,5 +66,16 @@ public class HBaseClientV2 {
     }
 
     log.info("read all - complete");
+  }
+
+  public void countAll(String tableName) throws Exception {
+    final ResultScanner resultScanner = connection.getTable(TableName.valueOf(tableName))
+                                                  .getScanner(new Scan());
+    log.info("counting...");
+    int count = 0;
+    for (Result result : resultScanner) {
+      count++;
+    }
+    log.info("rows num: {}", count);
   }
 }

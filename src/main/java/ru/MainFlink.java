@@ -2,7 +2,6 @@ package ru;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
-import org.apache.flink.util.Collector;
 import ru.task.MockTask;
 
 import java.util.Random;
@@ -14,16 +13,18 @@ class MainFlink {
   static void startFlink(SinkFunction sinkFunction) throws Exception {
     final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-    env.fromSequence(1, 10L)
-       .flatMap((Long value, Collector<Object> out) -> {
+    env.fromSequence(1, 1_000_000L)
+       .map((Long value) -> {
          final MockTask mockTask = new MockTask();
          mockTask.setId(random.nextLong());
          mockTask.setSomeString(UUID.randomUUID().toString());
-         out.collect(mockTask);
+         return mockTask;
        })
-       .returns((Class<Object>) Class.forName("ru.task.MockTask")) //todo: сделать нормально
        .addSink(sinkFunction);
 
+    long start = System.currentTimeMillis();
     env.execute();
+    long diff = System.currentTimeMillis() - start;
+    System.out.println("diff = " + diff);
   }
 }
