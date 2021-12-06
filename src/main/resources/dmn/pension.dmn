@@ -1,0 +1,899 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_CD53848C-23A9-471E-B638-BA3A4E8BD918" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="_A633D3C8-60C0-4198-A881-A682898BDA93" name="Выход на пенсию по возрасту" expressionLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_CD53848C-23A9-471E-B638-BA3A4E8BD918">
+  <dmn:extensionElements/>
+  <dmn:itemDefinition id="_A4A7DD76-5BCE-4084-B340-1E9C7D916E15" name="Человек" isCollection="false">
+    <dmn:itemComponent id="_9FEC65D9-9C6F-48F9-B6D1-14A450FD4F47" name="пол" isCollection="false">
+      <dmn:typeRef>Пол</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_926E6210-DD55-4EB8-9CB6-C988547CAA95" name="id" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_AEB5557F-E416-464B-BA17-88CD61275716" name="датаРождения" isCollection="false">
+      <dmn:typeRef>date</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_0F157E6C-E379-4466-989D-4131B4A56ADB" name="Пол" isCollection="false">
+    <dmn:typeRef>string</dmn:typeRef>
+    <dmn:allowedValues kie:constraintType="enumeration" id="_EAD481AB-D4B5-47A9-8F10-48C36EEA6C58">
+      <dmn:text>"Мужской", "Женский"</dmn:text>
+    </dmn:allowedValues>
+  </dmn:itemDefinition>
+  <dmn:inputData id="_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF" name="Человек">
+    <dmn:extensionElements/>
+    <dmn:variable id="_D9FE8CBD-1CC0-4636-924F-79A8E9C66DEE" name="Человек" typeRef="Человек"/>
+  </dmn:inputData>
+  <dmn:knowledgeSource id="_7293EB19-3878-4AF4-AEC5-618118463FDE" name="Проект Федерального закона № 489161-7" locationURI="">
+    <dmn:extensionElements/>
+    <dmn:type></dmn:type>
+  </dmn:knowledgeSource>
+  <dmn:decision id="_63CF1AF3-DEC9-4F22-8EE0-F56D6DA09713" name="Дата выхода на пенсию">
+    <dmn:extensionElements/>
+    <dmn:variable id="_D053E803-2287-4FAF-A79B-C5C039717320" name="Дата выхода на пенсию" typeRef="date"/>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_F630424B-2AEA-4D00-A1DA-AB611B442649">
+      <dmn:requiredInput href="#_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_631E9758-B2B1-4132-A515-19262F29779D">
+      <dmn:requiredDecision href="#_34AFA7DD-4007-4B77-8F5B-7D5429E5F7B9"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_C2B3A149-7C37-4C79-846A-0F6704716005">
+      <dmn:text>Человек.датаРождения+Возраст выхода на пенсию</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:businessKnowledgeModel id="_6FF5CF7A-AC3C-4E78-8360-46E26ED28C7E" name="Возраст выхода на пенсию-север">
+    <dmn:extensionElements/>
+    <dmn:variable id="_043E2CB0-3A37-4309-ADB0-3C7DAB29536E" name="Возраст выхода на пенсию-север" typeRef="years and months duration"/>
+    <dmn:encapsulatedLogic id="_90CD4661-1C5E-42CF-8A56-FA5C36319919" kind="FEEL">
+      <dmn:formalParameter id="_03452793-322F-4BA7-BBF7-455A893DC3E7" name="Пол" typeRef="Пол"/>
+      <dmn:formalParameter id="_9902E401-7E03-497F-B859-EFEF30F583DF" name="Дата рождения" typeRef="date"/>
+      <dmn:decisionTable id="_45695296-164E-474E-BE3D-9CD92DFF896D" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+        <dmn:input id="_A27A8958-592F-43C9-9E50-924A636223DD">
+          <dmn:inputExpression id="_4F683EA7-9A3A-4411-ACCD-C489C608C0C6" typeRef="Пол">
+            <dmn:text>Пол</dmn:text>
+          </dmn:inputExpression>
+        </dmn:input>
+        <dmn:input id="_8CC271AD-3073-472F-813B-99C768C4A2E7">
+          <dmn:inputExpression id="_6D396165-ECE4-48C2-9B93-2393AA7139A9" typeRef="date">
+            <dmn:text>Дата рождения</dmn:text>
+          </dmn:inputExpression>
+        </dmn:input>
+        <dmn:output id="_4F384696-207E-4B50-967C-CC37D667E703"/>
+        <dmn:annotation name="annotation-1"/>
+        <dmn:rule id="_0346D1E1-96A2-45CA-B22D-0541AA51C33B">
+          <dmn:inputEntry id="_9BF76D61-C8B6-467C-B8EB-8FBD175293FD">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_23D95BC2-0B01-4C58-926F-6BD0F094D513">
+            <dmn:text>&lt;date(1964,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_DD9F28CB-4B58-40AB-B7C3-9F94A511B1C4">
+            <dmn:text>duration("P55Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_44DDA3A4-709A-4CB1-B6FD-2EE493B3D837">
+          <dmn:inputEntry id="_9EA8EBAF-2C59-44FD-BE50-577DB559DB32">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_4E1757E5-1529-40A7-A8F8-F3E0CE64183E">
+            <dmn:text>[date(1964,1,1)..date(1965,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_60C8A834-41FF-4CBF-AA18-B1630ABD761B">
+            <dmn:text>duration("P55Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_9A72A72F-5CF3-4C76-ADA5-909BD724CF5A">
+          <dmn:inputEntry id="_4AFB80EA-DC8D-4AB3-A721-98D4C61B8120">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_59E3C770-A874-4ED0-8DA7-8B33C2D6DCF2">
+            <dmn:text>[date(1965,1,1)..date(1966,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_06C3ED08-255A-4F85-AB23-C15D45E20D8F">
+            <dmn:text>duration("P56Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_874587DF-E5D1-4460-B5F0-FE659F14B594">
+          <dmn:inputEntry id="_49E23CC1-905A-49BE-BBDC-1D2B2EBF1DE1">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_E24FEBA9-1AF7-462C-9F83-00CC80E72D16">
+            <dmn:text>[date(1966,1,1)..date(1967,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_B51E37B1-5B70-4059-AA3B-9A004184CAC1">
+            <dmn:text>duration("P58Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_9A08C85B-733C-4FDE-A37C-8C2118AA65B8">
+          <dmn:inputEntry id="_A781FC80-A9E7-4DFE-BF8D-9BD61BB1B9FF">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_39B7B872-CF4C-4234-90E1-19A1B18878F2">
+            <dmn:text>[date(1967,1,1)..date(1968,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_4AEB68EB-0EFD-4785-8580-5E33ABDB8EB7">
+            <dmn:text>duration("P59Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_859F7220-5FFC-4BC2-B255-BFB06B383724">
+          <dmn:inputEntry id="_636AB860-2A36-4880-B62E-4AA24CF82D7B">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_0BA83109-2D9B-489B-AA88-DE273A2DF56E">
+            <dmn:text>&gt;=date(1968,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_B3D0221E-DED4-4628-A50E-FA5F6F717D59">
+            <dmn:text>duration("P60Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_10F69326-77E7-4B82-A8AF-3CD243434322">
+          <dmn:inputEntry id="_6F55788A-D85B-4798-BA23-16424DAE5569">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_BCD26748-6113-4B15-AF02-CC6CBE61ABCD">
+            <dmn:text>&lt;date(1969,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_5FD5CC87-2C42-40F2-9456-E83B15E25930">
+            <dmn:text>duration("P50Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_96BB34F4-4032-44BA-A4CC-DA3DAB31900A">
+          <dmn:inputEntry id="_81A395CC-99A2-4F60-88BA-D56EA6C1DE53">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_8F980056-4CC7-4F51-A32A-BA5DA8EF4989">
+            <dmn:text>[date(1969,1,1)..date(1970,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_3B1463C7-4CB2-4156-9AC6-5F18AABC155E">
+            <dmn:text>duration("P50Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_6FD912B5-3049-4224-9B3B-FBB4897BB234">
+          <dmn:inputEntry id="_79BCF762-0F92-4CDB-8F0D-525B36D85F26">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_13F9DDB1-AD0E-4D51-8483-4D9B9F74A6CA">
+            <dmn:text>[date(1970,1,1)..date(1971,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_47FEC24B-C568-4B01-A5FE-4C034F0BF11E">
+            <dmn:text>duration("P51Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_BC423535-1124-4C4F-BD78-0BC98C2FF3E3">
+          <dmn:inputEntry id="_B5583815-C1E1-4124-920A-1F0E11515E03">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_5272913C-C0F7-4D67-AEF6-2616BF1B9D4E">
+            <dmn:text>[date(1971,1,1)..date(1972,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_EB0BBDA9-BA7A-400F-A8A3-B172BCFFB6CD">
+            <dmn:text>duration("P53Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_62F0B06C-F6B6-4B23-8536-3359C09FCE31">
+          <dmn:inputEntry id="_C21879DB-6AD4-47D5-8559-7AF62C26A274">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_E482C455-396B-4001-9EC2-B6CD4C648E50">
+            <dmn:text>[date(1972,1,1)..date(1973,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_30991A58-1CF0-4942-A13B-A209FBA50663">
+            <dmn:text>duration("P54Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_D738092A-10DD-4E27-AC32-9E5F654C76C8">
+          <dmn:inputEntry id="_47CC24B1-7040-4C98-9DE3-8C40D19DF66F">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_368CBD46-42D6-4549-B5AD-4718D7DA556A">
+            <dmn:text>&gt;=date(1973,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_C5E65DCC-5DC8-487F-9D66-DABFC181DA75">
+            <dmn:text>duration("P55Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+      </dmn:decisionTable>
+    </dmn:encapsulatedLogic>
+  </dmn:businessKnowledgeModel>
+  <dmn:decisionService id="_DBDE0934-FA2D-4B63-AD85-F798C884B58A" name="Критерий выхода на пенсию по возрасту">
+    <dmn:extensionElements/>
+    <dmn:variable id="_3A18F742-7FEC-4F5F-A594-B566605D93D7" name="Критерий выхода на пенсию по возрасту" typeRef="boolean"/>
+    <dmn:outputDecision href="#_5734F45B-3758-4384-9004-D765389DEB06"/>
+    <dmn:encapsulatedDecision href="#_63CF1AF3-DEC9-4F22-8EE0-F56D6DA09713"/>
+    <dmn:encapsulatedDecision href="#_34AFA7DD-4007-4B77-8F5B-7D5429E5F7B9"/>
+    <dmn:encapsulatedDecision href="#_480CDBF5-4D7E-4991-BCBE-306C02F3D61D"/>
+    <dmn:encapsulatedDecision href="#_DCE79E38-A57D-4E45-AB7D-2D2C1CC9EDB5"/>
+    <dmn:inputData href="#_70EAF192-641B-45B3-9FD6-1A9AEE663BE7"/>
+    <dmn:inputData href="#_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF"/>
+  </dmn:decisionService>
+  <dmn:businessKnowledgeModel id="_C7CDAA33-F7A4-432A-A6E7-C64BE443C4CD" name="Возраст выхода на пенсию-многодетность">
+    <dmn:extensionElements/>
+    <dmn:variable id="_47FEE0E9-376F-4E22-85A0-A9BB72544248" name="Возраст выхода на пенсию-многодетность" typeRef="years and months duration"/>
+    <dmn:encapsulatedLogic id="_79835CA1-B434-4AB6-BBFF-0B88B6930AFF" kind="FEEL">
+      <dmn:formalParameter id="_0C2336F7-C25E-44BE-AC5E-8202F746FF21" name="Количество детей" typeRef="number"/>
+      <dmn:formalParameter id="_D793C6AC-8091-4628-9274-DE76C8358FC8" name="Дата рождения" typeRef="date"/>
+      <dmn:decisionTable id="_5161C53F-2215-4C3A-ADEE-4162EAF379DE" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+        <dmn:input id="_20182074-394E-4848-9CB8-3FBDF2788B15">
+          <dmn:inputExpression id="_1853B3D7-EBBB-4BE3-9205-8C474E70D219" typeRef="number">
+            <dmn:text>Количество детей</dmn:text>
+          </dmn:inputExpression>
+          <dmn:inputValues kie:constraintType="range" id="_61FC8C87-19F3-40F8-9C88-3F38116E4C58">
+            <dmn:text>&gt;=3</dmn:text>
+          </dmn:inputValues>
+        </dmn:input>
+        <dmn:input id="_E02CA204-2D11-472F-9D06-BC2E0735471D">
+          <dmn:inputExpression id="_BF4448D2-27F1-438B-9D38-391A9D69D219" typeRef="date">
+            <dmn:text>Дата рождения</dmn:text>
+          </dmn:inputExpression>
+        </dmn:input>
+        <dmn:output id="_5CECC235-6D71-49A1-9FAC-C3EE31A360BB"/>
+        <dmn:annotation name="Комментарий"/>
+        <dmn:rule id="_860A00A9-E09C-4468-A531-09DC70FE7E77">
+          <dmn:inputEntry id="_C608D831-6266-46C4-AAF7-6786555C9D3D">
+            <dmn:text>[3..4]</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_77411D40-FA2E-437D-9063-4C58009FC763">
+            <dmn:text>&lt;date(1964,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_C519B7DF-153A-46AC-907E-050313F028F7">
+            <dmn:text>duration("P55Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_AC420869-F46B-4B49-AC5A-DA8D6A09CE6F">
+          <dmn:inputEntry id="_E0B674A4-9495-4144-A037-41A9ED91B3BF">
+            <dmn:text>[3..4]</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_DCF59239-5504-4DB3-B648-47838F611E27">
+            <dmn:text>[date(1964,1,1)..date(1965,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_35B704A2-A262-44CE-AF03-8F1DE4D6ADF0">
+            <dmn:text>duration("P55Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_A131E8D3-32AB-4B19-A55F-8C1D80FFB90E">
+          <dmn:inputEntry id="_1E2436FB-B936-4DE4-A542-5C9A081240B5">
+            <dmn:text>[3..4)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_0BAB241E-3484-48D3-A964-DC0EE2BF105E">
+            <dmn:text>[date(1965,1,1)..date(1966,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_C299C3DB-551B-4CC8-86F6-7F56A31050DB">
+            <dmn:text>duration("P56Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_71E7C2E4-8EC1-4E3C-88FD-6BAB559DCAFE">
+          <dmn:inputEntry id="_6F92340E-C3A6-44E7-9AD5-439F3109398F">
+            <dmn:text>[3..4)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_5262965F-216E-4002-8668-6D9CC228C7A7">
+            <dmn:text>&gt;=date(1966,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_3A45C276-B7DB-46EA-B63F-029C0303D1C9">
+            <dmn:text>duration("P57Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_68E69A87-1EEE-492C-831D-DF6867001D8A">
+          <dmn:inputEntry id="_3C6B9F8C-236B-4915-AADC-8D2C25D204FB">
+            <dmn:text>4</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_3F168518-90AB-40E7-97F5-FDC764EDB5A4">
+            <dmn:text>&gt;=date(1965,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_D9BC5712-39FD-4A9E-8CD7-F1061DBC4016">
+            <dmn:text>duration("P56Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_CC021EEF-08D7-4CFE-9C25-6DFB0D0F8D30">
+          <dmn:inputEntry id="_DD076267-576D-4B20-A5F4-F7EE83321430">
+            <dmn:text>&gt;4</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_E44868C0-D196-4AE7-B4D8-28F94B76AFB9">
+            <dmn:text>-</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_3B8AEB4D-6B3C-4525-9044-B6E4FCC5111C">
+            <dmn:text>duration("P50Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+      </dmn:decisionTable>
+    </dmn:encapsulatedLogic>
+  </dmn:businessKnowledgeModel>
+  <dmn:inputData id="_70EAF192-641B-45B3-9FD6-1A9AEE663BE7" name="Дата расчета">
+    <dmn:extensionElements/>
+    <dmn:variable id="_4B48BCC3-B97D-422A-B300-A642D7CB8905" name="Дата расчета" typeRef="date"/>
+  </dmn:inputData>
+  <dmn:businessKnowledgeModel id="_84754E17-553D-42F0-9E65-9770F31CE81F" name="Возраст выхода на пенсию-общий случай">
+    <dmn:extensionElements/>
+    <dmn:variable id="_7B2BA58D-F9A8-4E70-A8F9-63EB1DE8452A" name="Возраст выхода на пенсию-общий случай" typeRef="years and months duration"/>
+    <dmn:encapsulatedLogic id="_DB24F1B5-CE5A-414D-8854-89BD393EE2AD" kind="FEEL">
+      <dmn:formalParameter id="_C9D7884C-D6AB-45C5-AB3E-C459E1F71838" name="Пол" typeRef="Пол"/>
+      <dmn:formalParameter id="_D2A6A947-DA88-40BF-BE2C-D957B9F56BDD" name="Дата рождения" typeRef="date"/>
+      <dmn:decisionTable id="_9737DBA9-88AA-4007-ADEE-EEFA9F0F2C62" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+        <dmn:input id="_3169696F-D926-49BF-AF74-CB032F182126">
+          <dmn:inputExpression id="_11F332F6-013F-4A73-8848-1C57E0F61EA9" typeRef="Пол">
+            <dmn:text>Пол</dmn:text>
+          </dmn:inputExpression>
+        </dmn:input>
+        <dmn:input id="_ECCAFB6F-6696-4523-9988-92D71AA3D088">
+          <dmn:inputExpression id="_95588BB0-C1F4-4B4F-9372-D85C4DCB6D83" typeRef="date">
+            <dmn:text>Дата рождения</dmn:text>
+          </dmn:inputExpression>
+        </dmn:input>
+        <dmn:output id="_48D199D9-82F2-4104-BBE5-7D8E1F0F59F5"/>
+        <dmn:annotation name="annotation-1"/>
+        <dmn:rule id="_14278E25-782B-414C-8231-DC96C08590D1">
+          <dmn:inputEntry id="_96FD57AA-0DF4-44E3-8FE9-E29B936CBF8B">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_E69F43CC-DAD6-425F-96F1-84A90FEC06BB">
+            <dmn:text>&lt;date(1959,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_64223C08-6B96-4B75-96AE-0C71267EC5D1">
+            <dmn:text>duration("P60Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_A098C3AE-B047-4B7C-891C-70012654FDDD">
+          <dmn:inputEntry id="_3CA4CD6B-A1F6-44D8-AD76-129462D0EE8B">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_0007340E-232E-4745-A489-B000D439B367">
+            <dmn:text>[date(1959,1,1)..date(1960,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_159E32A9-254E-4E90-890B-ABC0F420B9A7">
+            <dmn:text>duration("P60YM6")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_A5694F8F-DF42-48B7-9342-736D9FC99735">
+          <dmn:inputEntry id="_8DAA81A1-8173-4EC0-B4C4-B0BFA4268688">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_8EB7A5F5-4969-42A9-B70A-782ECB0A69E3">
+            <dmn:text>[date(1960,1,1)..date(1961,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_A47E9711-1536-4E10-A721-E85594EE92A0">
+            <dmn:text>duration("P61Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_835E524A-4406-476A-90F3-9A0178300599">
+          <dmn:inputEntry id="_D99495EB-FFDE-4208-8D42-12A230939FCA">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_F0ACEBCA-6C2D-4355-9F2D-639029F2795A">
+            <dmn:text>[date(1961,1,1)..date(1962,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_27AB6F3F-D1F1-428A-AFA0-FD128954F800">
+            <dmn:text>duration("P63Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_BF57E49B-B802-4DEA-B753-1C65C299E2F4">
+          <dmn:inputEntry id="_40E7219D-6D23-442E-9997-16BA46537099">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_59A25F50-09E0-4A73-9F3F-A81AD0FF816E">
+            <dmn:text>[date(1962,1,1)..date(1963,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_BF55ADAC-89D2-4D6F-9F06-C2535CD962E8">
+            <dmn:text>duration("P64Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_615485B7-3787-40C6-B1F4-214CBDFD2D3F">
+          <dmn:inputEntry id="_D3A2956A-B47F-4776-BFD7-25C0E44D1624">
+            <dmn:text>"Мужской"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_34A3175A-F978-4B34-8CF4-B380C456F4EA">
+            <dmn:text>&gt;=date(1963,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_370A6BA7-4443-42BB-8D44-E5BCAB6F6B88">
+            <dmn:text>duration("P65Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_C7669021-A97F-4A70-AC45-35B7E3111A3F">
+          <dmn:inputEntry id="_CB6CCBDA-1C54-4FD1-8842-87D63D6527C5">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_D9E85EE8-2856-4CB7-8516-F404A047D8FF">
+            <dmn:text>&lt;date(1964,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_EBAE99DB-9F49-4DBD-B26A-E2E7424E03A0">
+            <dmn:text>duration("P55Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_2105C40F-5CF9-493B-AFB6-FFD73B37F4B3">
+          <dmn:inputEntry id="_4B1E4067-B115-490E-8CB7-9CC561D5EC33">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_6E179112-01F1-44AD-9811-96B4DB14DDB5">
+            <dmn:text>[date(1964,1,1)..date(1965,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_27A385EC-BED4-47B4-A623-9DB14D6A37E4">
+            <dmn:text>duration("P55Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_82B34B9F-CCCE-4A87-BC92-13AEDF62EEA1">
+          <dmn:inputEntry id="_1FF86841-48CF-4C11-8E21-B2565DAFB232">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_20E7E343-0568-40AB-AAEF-B04EAF71CFBF">
+            <dmn:text>[date(1965,1,1)..date(1966,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_39568513-449C-48FB-AC70-1DDEA1ADB838">
+            <dmn:text>duration("P56Y6M")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_64EBB31D-6DE0-4484-A491-AFD8988BBA48">
+          <dmn:inputEntry id="_6AFBC385-6495-4DA2-AD80-55CBE181DF3B">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_14942B2E-BEB8-464D-B9F7-94E532E37D70">
+            <dmn:text>[date(1966,1,1)..date(1967,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_9B41378D-C0F0-427A-A175-D52496BA4954">
+            <dmn:text>duration("P58Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_59E1F883-4DC7-4756-A577-5E54FB3EF153">
+          <dmn:inputEntry id="_68CAAA0C-2012-48E3-847F-1B058874A521">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_DFDC3483-0BB0-4557-90C0-F3F87D18EB7A">
+            <dmn:text>[date(1967,1,1)..date(1968,1,1))</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_E561E2FA-429C-4414-BC80-8BFE3DE30C27">
+            <dmn:text>duration("P59Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+        <dmn:rule id="_54175ADA-2259-4DEA-BA41-CB4A6E82B30E">
+          <dmn:inputEntry id="_103F7EF6-DC5A-4703-8B20-200E27AAC802">
+            <dmn:text>"Женский"</dmn:text>
+          </dmn:inputEntry>
+          <dmn:inputEntry id="_E1AB4D36-2E20-461B-9A56-68C8E4B6D8A0">
+            <dmn:text>&gt;=date(1968,1,1)</dmn:text>
+          </dmn:inputEntry>
+          <dmn:outputEntry id="_8DBD49D5-F684-470B-A123-AF5A907A6767">
+            <dmn:text>duration("P60Y")</dmn:text>
+          </dmn:outputEntry>
+          <dmn:annotationEntry>
+            <dmn:text></dmn:text>
+          </dmn:annotationEntry>
+        </dmn:rule>
+      </dmn:decisionTable>
+    </dmn:encapsulatedLogic>
+    <dmn:authorityRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_615698EB-2F14-4E26-A84B-4B40D6EE9AE0">
+      <dmn:requiredAuthority href="#_7293EB19-3878-4AF4-AEC5-618118463FDE"/>
+    </dmn:authorityRequirement>
+  </dmn:businessKnowledgeModel>
+  <dmn:decision id="_5734F45B-3758-4384-9004-D765389DEB06" name="Человек может выйти на пенсию по возрасту">
+    <dmn:extensionElements/>
+    <dmn:variable id="_B751626E-AC99-44EC-ABD2-5143AD272E9D" name="Человек может выйти на пенсию по возрасту" typeRef="boolean"/>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_823ADE60-8351-44D7-90C1-30F107022FA1">
+      <dmn:requiredInput href="#_70EAF192-641B-45B3-9FD6-1A9AEE663BE7"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_0C16146A-960C-44FA-9366-8ED8E273A641">
+      <dmn:requiredDecision href="#_63CF1AF3-DEC9-4F22-8EE0-F56D6DA09713"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_8CCCAE0C-2716-4BD6-A943-6EE7C23C77E7">
+      <dmn:text>Дата расчета>=Дата выхода на пенсию</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:decision id="_480CDBF5-4D7E-4991-BCBE-306C02F3D61D" name="Критерий северного стажа">
+    <dmn:extensionElements/>
+    <dmn:variable id="_12E7E653-59F5-4AFA-B43A-CA6A5647B30A" name="Критерий северного стажа" typeRef="boolean"/>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_263EFFCF-F035-4578-B5EE-2C679D88C283">
+      <dmn:requiredInput href="#_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_06856E01-F661-4912-BEFD-37007FB38305">
+      <dmn:text>false</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:decision id="_DCE79E38-A57D-4E45-AB7D-2D2C1CC9EDB5" name="Количество воспитанных детей">
+    <dmn:extensionElements/>
+    <dmn:variable id="_2111969D-3CD8-498E-8674-3F613C873D63" name="Количество воспитанных детей" typeRef="number"/>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_CDC3C1CF-C55A-408C-96C1-CC34A8B9E749">
+      <dmn:requiredInput href="#_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_2BFF1931-C04E-43E2-A09F-D23E7F8C717F">
+      <dmn:text>2</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:decision id="_34AFA7DD-4007-4B77-8F5B-7D5429E5F7B9" name="Возраст выхода на пенсию">
+    <dmn:extensionElements/>
+    <dmn:variable id="_0D941630-1227-4D71-AB7D-3B8FEE3BCDD7" name="Возраст выхода на пенсию" typeRef="years and months duration"/>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9393FAD5-A871-4C3F-8C56-21B21CE7A7EB">
+      <dmn:requiredInput href="#_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9822639E-C39B-4524-B4BA-6A69A7401D33">
+      <dmn:requiredDecision href="#_480CDBF5-4D7E-4991-BCBE-306C02F3D61D"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_6FE65937-1990-4C9C-9830-2A64B288EB07">
+      <dmn:requiredDecision href="#_DCE79E38-A57D-4E45-AB7D-2D2C1CC9EDB5"/>
+    </dmn:informationRequirement>
+    <dmn:knowledgeRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_8E34F1F3-FE7C-498C-A948-CB380E356295">
+      <dmn:requiredKnowledge href="#_84754E17-553D-42F0-9E65-9770F31CE81F"/>
+    </dmn:knowledgeRequirement>
+    <dmn:knowledgeRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_51116A5B-6765-4268-9A7B-5606DB91199A">
+      <dmn:requiredKnowledge href="#_C7CDAA33-F7A4-432A-A6E7-C64BE443C4CD"/>
+    </dmn:knowledgeRequirement>
+    <dmn:knowledgeRequirement id="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_064F3491-6C06-4B5A-847D-B859932D82CC">
+      <dmn:requiredKnowledge href="#_6FF5CF7A-AC3C-4E78-8360-46E26ED28C7E"/>
+    </dmn:knowledgeRequirement>
+    <dmn:decisionTable id="_BB9DA34C-21ED-4098-A7CC-93DE2B95C4AD" hitPolicy="COLLECT" aggregation="MIN" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_9215CD19-8A81-4584-8D32-2AD19D23F551">
+        <dmn:inputExpression id="_324A92D4-3226-4BFA-AC41-409FA6D79BB5" typeRef="number">
+          <dmn:text>Количество воспитанных детей</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_87EEBD95-B4F2-49E5-83C9-4E0A19E14D19">
+        <dmn:inputExpression id="_722DCB54-0CC7-4FE5-84AE-5A41729422B3" typeRef="boolean">
+          <dmn:text>Критерий северного стажа</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_9A015208-0980-4AA5-BFC1-72728BB4A6A7">
+        <dmn:inputExpression id="_762AC287-10C2-4B95-8DCE-32F412BE3EED" typeRef="Пол">
+          <dmn:text>Человек.пол</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_191D82B3-4BE6-4652-A020-176F438A8BE3"/>
+      <dmn:annotation name="annotation-1"/>
+      <dmn:rule id="_1BC646ED-ACC0-4A01-AEDF-D15AF9A76E63">
+        <dmn:inputEntry id="_9DC5356E-BBAC-486D-BD80-BA9294DAD4E3">
+          <dmn:text>&gt;=3</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A75AB93C-AD41-4F95-B8C7-BAF1B3355024">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E38BD2ED-6EA7-4BE5-86DC-EA52130C9DFA">
+          <dmn:text>"Женский"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_FF0CB8A7-5B92-4A45-B3D0-0CE7EFE94D43">
+          <dmn:text>Возраст выхода на пенсию-многодетность(Количество воспитанных детей, Человек.датаРождения)</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text></dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_8747E088-74C3-463E-BF95-CDD347203249">
+        <dmn:inputEntry id="_7FFB3938-7EE3-4E0D-9BCD-A290B424D60C">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C8381A5A-6A90-435C-B49A-400491FC5EB0">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_4805BD37-BF3A-4EFA-8FD2-5BD5C581E38E">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_4B788C8F-6351-4738-8633-2798BBDEA123">
+          <dmn:text>Возраст выхода на пенсию-север(Человек.пол,Человек.датаРождения)</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text></dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_4F3F5661-2566-41EB-870A-045847EB3EDF">
+        <dmn:inputEntry id="_709C1EE1-C1AE-4390-AB25-F1466B859608">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A49CB1E9-BDF8-41EB-910C-673E691705CE">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_93D5880F-7CDD-45F6-8780-75037DD8DB17">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_B817F0B0-629D-4F86-9082-EC0B281AEDE8">
+          <dmn:text>Возраст выхода на пенсию-общий случай(Человек.пол,Человек.датаРождения)</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text></dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_2BFF1931-C04E-43E2-A09F-D23E7F8C717F">
+            <kie:width>300.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_45695296-164E-474E-BE3D-9CD92DFF896D">
+            <kie:width>50.0</kie:width>
+            <kie:width>119.0</kie:width>
+            <kie:width>318.0</kie:width>
+            <kie:width>331.0</kie:width>
+            <kie:width>134.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_90CD4661-1C5E-42CF-8A56-FA5C36319919">
+            <kie:width>50.0</kie:width>
+            <kie:width>972.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_5161C53F-2215-4C3A-ADEE-4162EAF379DE">
+            <kie:width>50.0</kie:width>
+            <kie:width>161.0</kie:width>
+            <kie:width>294.0</kie:width>
+            <kie:width>206.0</kie:width>
+            <kie:width>221.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_79835CA1-B434-4AB6-BBFF-0B88B6930AFF">
+            <kie:width>50.0</kie:width>
+            <kie:width>952.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_9737DBA9-88AA-4007-ADEE-EEFA9F0F2C62">
+            <kie:width>50.0</kie:width>
+            <kie:width>119.0</kie:width>
+            <kie:width>318.0</kie:width>
+            <kie:width>331.0</kie:width>
+            <kie:width>134.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_DB24F1B5-CE5A-414D-8854-89BD393EE2AD">
+            <kie:width>50.0</kie:width>
+            <kie:width>972.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_8CCCAE0C-2716-4BD6-A943-6EE7C23C77E7">
+            <kie:width>381.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_06856E01-F661-4912-BEFD-37007FB38305">
+            <kie:width>300.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_BB9DA34C-21ED-4098-A7CC-93DE2B95C4AD">
+            <kie:width>50.0</kie:width>
+            <kie:width>235.0</kie:width>
+            <kie:width>204.0</kie:width>
+            <kie:width>163.0</kie:width>
+            <kie:width>606.0</kie:width>
+            <kie:width>100.0</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_C2B3A149-7C37-4C79-846A-0F6704716005">
+            <kie:width>787.0</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape id="dmnshape-_DBDE0934-FA2D-4B63-AD85-F798C884B58A" dmnElementRef="_DBDE0934-FA2D-4B63-AD85-F798C884B58A" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="190" y="1" width="566" height="492"/>
+        <dmndi:DMNLabel/>
+        <dmndi:DMNDecisionServiceDividerLine>
+          <di:waypoint x="190" y="126"/>
+          <di:waypoint x="756" y="126"/>
+        </dmndi:DMNDecisionServiceDividerLine>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_DCE79E38-A57D-4E45-AB7D-2D2C1CC9EDB5" dmnElementRef="_DCE79E38-A57D-4E45-AB7D-2D2C1CC9EDB5" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="475" y="360" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_6FF5CF7A-AC3C-4E78-8360-46E26ED28C7E" dmnElementRef="_6FF5CF7A-AC3C-4E78-8360-46E26ED28C7E" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="836" y="285" width="157" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_C7CDAA33-F7A4-432A-A6E7-C64BE443C4CD" dmnElementRef="_C7CDAA33-F7A4-432A-A6E7-C64BE443C4CD" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="836" y="209.3421052631579" width="159" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_84754E17-553D-42F0-9E65-9770F31CE81F" dmnElementRef="_84754E17-553D-42F0-9E65-9770F31CE81F" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="837" y="133.3421052631579" width="157" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF" dmnElementRef="_4B44BFEF-B236-4D53-83F4-4EF27D8BF3CF" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="309.29906542056074" y="518" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_5734F45B-3758-4384-9004-D765389DEB06" dmnElementRef="_5734F45B-3758-4384-9004-D765389DEB06" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="334" y="46" width="146" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_70EAF192-641B-45B3-9FD6-1A9AEE663BE7" dmnElementRef="_70EAF192-641B-45B3-9FD6-1A9AEE663BE7" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="190.29906542056074" y="518" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_480CDBF5-4D7E-4991-BCBE-306C02F3D61D" dmnElementRef="_480CDBF5-4D7E-4991-BCBE-306C02F3D61D" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="619" y="360" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_7293EB19-3878-4AF4-AEC5-618118463FDE" dmnElementRef="_7293EB19-3878-4AF4-AEC5-618118463FDE" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1124" y="135" width="158" height="55"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_34AFA7DD-4007-4B77-8F5B-7D5429E5F7B9" dmnElementRef="_34AFA7DD-4007-4B77-8F5B-7D5429E5F7B9" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="529" y="211" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-_63CF1AF3-DEC9-4F22-8EE0-F56D6DA09713" dmnElementRef="_63CF1AF3-DEC9-4F22-8EE0-F56D6DA09713" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="430" y="135" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_CDC3C1CF-C55A-408C-96C1-CC34A8B9E749" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_CDC3C1CF-C55A-408C-96C1-CC34A8B9E749">
+        <di:waypoint x="359.29906542056074" y="543"/>
+        <di:waypoint x="525" y="385"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_615698EB-2F14-4E26-A84B-4B40D6EE9AE0-AUTO-TARGET" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_615698EB-2F14-4E26-A84B-4B40D6EE9AE0">
+        <di:waypoint x="1203" y="162.5"/>
+        <di:waypoint x="994" y="158.3421052631579"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_823ADE60-8351-44D7-90C1-30F107022FA1" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_823ADE60-8351-44D7-90C1-30F107022FA1">
+        <di:waypoint x="240.29906542056074" y="543"/>
+        <di:waypoint x="407" y="71"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_0C16146A-960C-44FA-9366-8ED8E273A641" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_0C16146A-960C-44FA-9366-8ED8E273A641">
+        <di:waypoint x="480" y="160"/>
+        <di:waypoint x="407" y="71"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_263EFFCF-F035-4578-B5EE-2C679D88C283" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_263EFFCF-F035-4578-B5EE-2C679D88C283">
+        <di:waypoint x="359.29906542056074" y="543"/>
+        <di:waypoint x="669" y="385"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9393FAD5-A871-4C3F-8C56-21B21CE7A7EB" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9393FAD5-A871-4C3F-8C56-21B21CE7A7EB">
+        <di:waypoint x="359.29906542056074" y="543"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9822639E-C39B-4524-B4BA-6A69A7401D33" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_9822639E-C39B-4524-B4BA-6A69A7401D33">
+        <di:waypoint x="669" y="385"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_6FE65937-1990-4C9C-9830-2A64B288EB07" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_6FE65937-1990-4C9C-9830-2A64B288EB07">
+        <di:waypoint x="525" y="385"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_8E34F1F3-FE7C-498C-A948-CB380E356295" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_8E34F1F3-FE7C-498C-A948-CB380E356295">
+        <di:waypoint x="915.5" y="158.3421052631579"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_51116A5B-6765-4268-9A7B-5606DB91199A" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_51116A5B-6765-4268-9A7B-5606DB91199A">
+        <di:waypoint x="915.5" y="234.34210526315792"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_064F3491-6C06-4B5A-847D-B859932D82CC" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_064F3491-6C06-4B5A-847D-B859932D82CC">
+        <di:waypoint x="914.5" y="310"/>
+        <di:waypoint x="579" y="236"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_F630424B-2AEA-4D00-A1DA-AB611B442649" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_F630424B-2AEA-4D00-A1DA-AB611B442649">
+        <di:waypoint x="359.29906542056074" y="543"/>
+        <di:waypoint x="480" y="160"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-_79F1B9BD-26BF-49BC-832E-599EBB76135C#_631E9758-B2B1-4132-A515-19262F29779D" dmnElementRef="_79F1B9BD-26BF-49BC-832E-599EBB76135C#_631E9758-B2B1-4132-A515-19262F29779D">
+        <di:waypoint x="579" y="236"/>
+        <di:waypoint x="480" y="160"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>

@@ -1,14 +1,12 @@
 package ru.table.lsdm;
 
-import lombok.experimental.UtilityClass;
 import ru.table.dto.TableDdl;
 
-@UtilityClass
 public class LsdmRight {
   public static final String TABLE_NAME = "LSDM_Right";
 
   public static final String TABLE__CF1 = "CF1";
-  public static final String TABLE__CF1__ID = "ID";
+
   public static final String TABLE__CF1__KIND_MEASURE_ID = "KindMeasureID";
   public static final String TABLE__CF1__RECIPIENT_ID = "RecipientID";
   public static final String TABLE__CF1__EXECUTION_OUTPUT_DATA_ID = "ExecutionOutputDataID";

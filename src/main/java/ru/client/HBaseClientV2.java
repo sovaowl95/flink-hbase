@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.TableDescriptorBuilder;
-import ru.table.dto.iTable;
+import ru.table.dto.TableDdl;
 
 import java.io.IOException;
 
@@ -27,14 +27,15 @@ public class HBaseClientV2 {
     log.info("hbaseclient connection... complete");
   }
 
-  public void createTableIfNotExists(iTable iTable) throws IOException {
+  public void createTableIfNotExists(final TableDdl tableDdl) throws IOException {
     try (Admin admin = connection.getAdmin()) {
-      TableName tableName = TableName.valueOf(iTable.getTableName());
+      final String name = tableDdl.getTableName();
+      final TableName tableName = TableName.valueOf(name);
       if (admin.tableExists(tableName)) {
         log.info("Table [" + tableName + "] is already existed.");
       } else {
         TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableName);
-        for (String cf : iTable.getColumnFamilies()) {
+        for (String cf : tableDdl.getCf()) {
           log.info("CF: " + cf);
           builder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(cf));
         }
@@ -47,7 +48,7 @@ public class HBaseClientV2 {
   }
 
 
-  public void write(String tableName, Put put) throws IOException {
+  public void put(String tableName, Put put) throws IOException {
     try (Table table = connection.getTable(TableName.valueOf(tableName))) {
       table.put(put);
     }

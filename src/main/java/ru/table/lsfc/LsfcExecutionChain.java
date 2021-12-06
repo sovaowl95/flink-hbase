@@ -1,14 +1,12 @@
 package ru.table.lsfc;
 
-import lombok.experimental.UtilityClass;
 import ru.table.dto.TableDdl;
 
-@UtilityClass
 public final class LsfcExecutionChain {
   public static final String TABLE_NAME = "LSFC_ExecutionChain";
 
   public static final String TABLE__CF1 = "CF1";
-  public static final String TABLE__CF1__ID = "ID";
+
   public static final String TABLE__CF1__KIND_MEASURE_ID = "KindMeasureID";
   public static final String TABLE__CF1__MEASURE_ID = "MeasureID";
   public static final String TABLE__CF1__CONTEXT_ID = "ContextID";
