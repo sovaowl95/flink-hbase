@@ -9,7 +9,6 @@ import org.kie.dmn.api.core.DMNResult;
 import ru.client.HBaseClientV2;
 import ru.dmn.DmnExecutor;
 import ru.table.lsfc.LsfcOutputData;
-import ru.table.lsfc.LsfcOutputDataDto;
 import ru.table.lsfc.LsfcTriggerEvent;
 
 import java.time.LocalDate;
@@ -40,9 +39,9 @@ public class Main {
 //    hBaseClientV2.readAll(MockTable.TABLE_NAME);
 //    hBaseClientV2.countAll(MockTable.TABLE_NAME);
 
-
-    final LsfcTriggerEvent lsfcTriggerEvent =
-        new LsfcTriggerEvent(); //todo: создать запись о том, кто/что начал(о) событие
+//
+//    final LsfcTriggerEvent lsfcTriggerEvent =
+//        new LsfcTriggerEvent(); //todo: создать запись о том, кто/что начал(о) событие
 
 
     final DmnExecutor dmnExecutor = new DmnExecutor();
@@ -58,19 +57,23 @@ public class Main {
     final DMNResult dmnResult = dmnExecutor.execute(person);
     for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
       if (DMNDecisionResult.DecisionEvaluationStatus.SUCCEEDED == decisionResult.getEvaluationStatus()) {
+
+
         final String decisionId = decisionResult.getDecisionId();
         //executionid  LSFC_Execution
         //calcoutputparameterid  LSFC_OutputData
         final boolean result = Boolean.parseBoolean(decisionResult.getResult().toString());
         //state
         //message
-
-        final LsfcOutputDataDto lsfcOutputDataDto = new LsfcOutputDataDto().setId(decisionId)
-                                                                           .setExecutionId()
-                                                                           .setCalcOutputParameterId()
-                                                                           .setResult()
-                                                                           .setState()
-                                                                           .setMessage();
+//
+        //todo: передавать туда DMNDecisionResult?
+        final LsfcOutputData lsfcOutputDataDto
+            = new LsfcOutputData(decisionId,
+                                 null,
+                                 null,
+                                 result,
+                                 null,
+                                 null);
         final Put put = lsfcOutputDataDto.toPut();
         hBaseClientV2.put(LsfcOutputData.TABLE_NAME, put);
       } else {
@@ -79,6 +82,8 @@ public class Main {
       }
     }
   }
+
+//  private LsfcExecution
 
   private static Configuration createConfiguration() {
     log.info("createConfiguration...");
