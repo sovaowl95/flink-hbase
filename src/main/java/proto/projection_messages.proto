@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "proto/state.proto";
+option java_multiple_files = true;
+option java_package = "ecp.zhs";
+
+
+package ecp.zhs;
+
+message WaveStateUpdate{
+  // Описание текущей волны расчетов. Она может быть приостановленной, либо дойти до конца в зависимости от current_execution/total_executions
+  WaveState wave_state = 1;
+  // Текущие посчитанные значения всех выходных параметров.
+  OutputVersion all_outputs = 2;
+}

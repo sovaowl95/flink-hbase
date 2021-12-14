@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+option java_multiple_files = true;
+option java_package = "ecp.zhs";
+
+package ecp.zhs;
+
+// Сообщение о завершившемся вызове функции
+message FunctionCallCompleted{
+  CallFunction source_call_function = 1; // Функция, которая вызывалась
+  map<string, google.protobuf.Any> output_values = 2; // Результаты вызова функции
+}
+
+// Команда для вызова функции расчета (DMN или внешняя функция)
+message CallFunction {
+  string wave_id = 1; // Идентификатор волны, в рамках которой происходит вызов
+  string execution_definition_id = 2; // Идентификатор вызываемой функции
+  map<string, google.protobuf.Any> input_values = 3; // Входные параметры для вызова функции
+}
+
+// Команда для продолжения волны расчетов (переход к следующему узлу расчета)
+message RollWaveUp{
+}
+
+// Команда для запуска волны расчетов
+message StartWave{
+  //Изменившиеся по сравнению с предыдущим расчетом объекты.
+  //Если словарь отсутствует или пустой-изменившиеся объекты не известны, нужно брать "последние актуальные" версии
+  map<string, SourceObject> changed_objects = 1;
+}
+
+// Коллекция входных данных для начала расчетов (словарь)
+message SourceState{
+  map<string, SourceObject> source_objects = 1;
+}
+
+// Исходный объект из внешнего мира, который поступает на вход для расчетов
+message SourceObject{
+  // Либо ссылочный объект из какого-либо сервиса, либо простой скалярный объект, передающийся по значению
+  oneof Object{
+    ReferenceObject reference_object=1;
+    ValueObject value_object=2;
+  }
+}
+
+// Объект, передающийся по ссылке. Значения хранятся во внешнем сервисе.
+message ReferenceObject{
+  string type = 1; // Полный тип объекта (namespace + type name)
+  string key = 2; // Первичный ключ объекта
+  string version_id = 3; // Идентификатор нужной версии
+}
+
+// Объект, передающийся по значению
+message ValueObject{
+  google.protobuf.Any value = 1;// Имеет только значение
+}

@@ -25,14 +25,14 @@ public final class LsfcOutputData implements Entity {
   private static final String CF_1_STATE = "State";
   private static final String CF_1_MESSAGE = "Message";
 
-  private final Long id;
+  private final String id;
   private final Row<Long> executionId;
   private final Row<Long> calcOutputParameterId;
   private final Row<Boolean> result;
   private final Row<Byte> state;
   private final Row<String> message;
 
-  public LsfcOutputData(final Long id,
+  public LsfcOutputData(final String id,
                         final Long executionId,
                         final Long calcOutputParameterId,
                         final Boolean result,

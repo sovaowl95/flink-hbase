@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "proto/messages.proto";
+option java_multiple_files = true;
+option java_package = "ecp.zhs";
+
+package ecp.zhs;
+
+// Состояние волны расчетов
+message WaveState {
+  string id = 1; // Идентификатор волны
+  string chain_id = 2; // Идентификатор конфигурации цепочки расчетов (с версией и т.д.)
+  int32 current_execution = 3; // Текущий порядковый номер узла, который нужно выполнить
+  int32 total_executions = 4; // Общее количество узлов в дереве, которые нужно выполнить
+  SourceState source_state_changes = 5; // Причина, которая вызвала волну расчетов (изменения, породившие перерасчет)
+  repeated Execution executions = 6; // Факты выполнения функций в рамках волны
+}
+
+// Текущие результаты всех выходных параметров в дереве расчетов
+message OutputVersion {
+  string chain_id = 1; // Идентификатор конфигурации цепочки расчетов (с версией и т.д.)
+  map<string, Output> outputs = 2; // Словарь с результатами. Ключ-идентификатор узла в дереве расчетов (из базы знаний).
+}
+
+// Значение выходного параметра в узле расчета
+message Output {
+  string output_id = 1; // Идентификатор выходного параметра
+  string execution_id = 2; // Идентификатор вызова функции, в котором получено это значение
+  google.protobuf.Any value = 3; // Значение
+}
+
+// Факт вызова функции в узле расчета
+message Execution{
+  string execution_id = 1; // Идентификатор вызова
+  string wave_id = 2; // Идентификатор волны, в рамках которой происходил вызов функции
+  string execution_definition_id = 3; // Идентификатор вызванной функции
+  repeated Output new_output_versions = 4;
+}
