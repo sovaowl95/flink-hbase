@@ -45,7 +45,13 @@ public class ParamChangeTask {
     final BzMszStageParam bzMszStageParam = bzMszStageParamOptional.get();
 
     //todo: check
-    final BzMszStage bzMszStage = bzMszStageService.findByBzMszStageId(bzMszStageParam);
+    final Optional<BzMszStage> bzMszStageOptional = bzMszStageService.findByBzMszStageId(bzMszStageParam);
+    if (bzMszStageOptional.isEmpty()) {
+      log.info("bzMszStage is null");
+      return;
+    }
+
+    final BzMszStage bzMszStage = bzMszStageOptional.get();
     //todo: странный переход. уточнить. правильно ли я понял
     final BzMsz bzMsz = bzMszService.findByBzMszStage(bzMszStage);
 

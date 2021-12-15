@@ -1,7 +1,7 @@
 package ru.test.service.bz;
 
 import ecp.zhs.Output;
-import lombok.RequiredArgsConstructor;
+import ru.test.mock.Constants;
 import ru.test.mock.bz.BzMszStageParam;
 import ru.test.service.bz2.BzConfigurationService;
 
@@ -9,16 +9,39 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class BzMszStageParamService {
   //todo: mock. replace with REST
   final ArrayList<BzMszStageParam> mock = new ArrayList<>();
+  private final BzConfigurationService bzConfigurationService = new BzConfigurationService();
 
-  private BzMszStageParamService() {
+  public BzMszStageParamService() {
+    BzMszStageParam bzMszStageParam;
 
+    bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
+    bzMszStageParam.setBzMszStageId(Constants.BzMszStage_ID_1);
+    bzMszStageParam.setName("name1");
+    mock.add(bzMszStageParam);
+
+    bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
+    bzMszStageParam.setBzMszStageId(Constants.BzMszStage_ID_1);
+    bzMszStageParam.setName("name2");
+    mock.add(bzMszStageParam);
+
+    bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
+    bzMszStageParam.setBzMszStageId(Constants.BzMszStage_ID_2);
+    bzMszStageParam.setName("name3");
+    mock.add(bzMszStageParam);
+
+    bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
+    bzMszStageParam.setBzMszStageId(Constants.BzMszStage_ID_3);
+    bzMszStageParam.setName("name4");
+    mock.add(bzMszStageParam);
   }
 
-  private final BzConfigurationService bzConfigurationService;
 
   @Nonnull
   public Optional<BzMszStageParam> findByOutput(Output output) {
@@ -38,14 +61,13 @@ public class BzMszStageParamService {
     return Optional.empty();
   }
 
-  private Optional<BzMszStageParam> findByOutputId(final String outputId) {
-    //todo:
-    final BzMszStageParam value = new BzMszStageParam();
-    return Optional.of(value);
-  }
+  public Optional<BzMszStageParam> findByOutputId(final String outputId) {
+    for (BzMszStageParam bzMszStageParam : mock) {
+      if (bzMszStageParam.getOutputId().equals(outputId)) {
+        return Optional.of(bzMszStageParam);
+      }
+    }
 
-  public BzMszStageParam findByKey(String key) {
-    //todo: не понимаю, что сюда писать
-    return null;
+    return Optional.empty();
   }
 }

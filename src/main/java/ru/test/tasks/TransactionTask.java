@@ -48,7 +48,14 @@ public class TransactionTask {
     }
     final BzMszTransactionStages bzMszTransactionStages = bzMszTransactionStagesOptional.get();
 
-    final BzMszStage bzMszStage = bzMszStageService.findByBzMszTransactionStages(bzMszTransactionStages);
+    final Optional<BzMszStage> bzMszStageOptional
+        = bzMszStageService.findByBzMszTransactionStages(bzMszTransactionStages);
+    if(bzMszStageOptional.isEmpty()){
+      log.info("BzMszStage is null");
+      return;
+    }
+    final BzMszStage bzMszStage = bzMszStageOptional.get();
+
     //todo: странный переход. уточнить. правильно ли я понял
     final BzMsz bzMsz = bzMszService.findByBzMszStage(bzMszStage);
 
@@ -81,7 +88,8 @@ public class TransactionTask {
 
     var list = new ArrayList<MszStageParam>();
     for (Map.Entry<String, String> entry : keyValueMap.entrySet()) {
-      var bzMszStageParam = bzMszStageParamService.findByKey(entry.getKey());
+      //todo: а что тут должно быть вместо OutputId? не понятна эта структура для карты
+      var bzMszStageParam = bzMszStageParamService.findByOutputId(entry.getKey());
 
       final var mszStageParam = new MszStageParam();
       mszStageParam.setId(UUID.randomUUID().toString());
