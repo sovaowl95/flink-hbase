@@ -2,6 +2,7 @@ package ru.test.tasks;
 
 import ecp.zhs.Output;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ru.test.mock.bz.BzMsz;
 import ru.test.mock.bz.BzMszStage;
 import ru.test.mock.bz.BzMszStageParam;
@@ -21,6 +22,7 @@ import java.util.UUID;
 //todo: сделать всё Optional, чтобы зафорсить людей проверять и обрабатывать ошибки
 //todo: сделать везде общение через id
 @RequiredArgsConstructor
+@Slf4j
 public class ParamChangeTask {
   private final BzMszService bzMszService;
   private final BzMszStageService bzMszStageService;
@@ -30,21 +32,22 @@ public class ParamChangeTask {
   private final MszStageService mszStageService;
   private final MszStageParamService mszStageParamService;
 
+
   public void execute(final Output output) {
-    final String outputId = output.getOutputId();
-    final String personId = ""; //todo:
+    final String personId = ""; //todo: он будет в output?
     final Object value = output.getValue();
 
-    final Optional<BzMszStageParam> bzMszStageParamOptional = bzMszStageParamService.findByOutputId(outputId);
+    final Optional<BzMszStageParam> bzMszStageParamOptional = bzMszStageParamService.findByOutput(output);
     if (bzMszStageParamOptional.isEmpty()) {
-      return; //todo: обновить конфигурацию и повторить?
+      log.info("bzMszStageParam is null");
+      return;
     }
     final BzMszStageParam bzMszStageParam = bzMszStageParamOptional.get();
-    //todo: check
 
-    final BzMszStage bzMszStage = bzMszStageService.findById(bzMszStageParam.getBzMszStage());
+    //todo: check
+    final BzMszStage bzMszStage = bzMszStageService.findByBzMszStageId(bzMszStageParam);
     //todo: странный переход. уточнить. правильно ли я понял
-    final BzMsz bzMsz = bzMszService.findBy(bzMszStage.getBzMsz());
+    final BzMsz bzMsz = bzMszService.findByBzMszStage(bzMszStage);
 
     final Msz msz = mszService.findByMszAndPerson(bzMsz, personId);
 
@@ -65,4 +68,6 @@ public class ParamChangeTask {
     mszStageParam.setValue(value);
     mszStageParamService.save(mszStageParam);
   }
+
+
 }

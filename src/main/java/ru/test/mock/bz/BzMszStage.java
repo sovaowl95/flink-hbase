@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class BzMszStage {
   private String id;
-  private BzMsz bzMsz;
+  private String bzMszId;
 }

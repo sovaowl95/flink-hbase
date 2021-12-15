@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BzMszTransactionStages {
-  private BzMszStage from;
-  private BzMszStage to;
-  private String outputId;
+  private String outputId; //key
+  private String fromBzMszStageId;
+  private String toBzMszStageId;
 }

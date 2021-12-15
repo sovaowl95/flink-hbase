@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class BzMszStageParam {
   private String id;
-  private BzMszStage bzMszStage;
+  private String bzMszStageId;
   private String outputId;
   private String name;
 }
