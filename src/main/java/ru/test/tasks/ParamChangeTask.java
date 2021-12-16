@@ -55,16 +55,26 @@ public class ParamChangeTask {
 
     //todo: странный переход. уточнить. правильно ли я понял
     final Optional<BzMsz> bzMszOptional = bzMszService.findByBzMszStage(bzMszStage);
-    if(bzMszOptional.isEmpty()){
+    if (bzMszOptional.isEmpty()) {
       log.info("BzMsz is null");
       return;
     }
     final BzMsz bzMsz = bzMszOptional.get();
 
 
-    final Msz msz = mszService.findByMszAndPerson(bzMsz, personId);
+    final Optional<Msz> mszOptional = mszService.findByMszAndPerson(bzMsz, personId);
+    if (mszOptional.isEmpty()) {
+      log.info("Msz is null");
+      return;
+    }
+    final Msz msz = mszOptional.get();
 
-    final MszStage mszStage = mszStageService.findByMsz(msz);
+    final Optional<MszStage> mszStageOptional = mszStageService.findByMsz(msz);
+    if (mszStageOptional.isEmpty()) {
+      log.info("MszStage is null");
+      return;
+    }
+    final MszStage mszStage = mszStageOptional.get();
     //todo: является ли загруженный этап - последним?
 
 
@@ -76,8 +86,8 @@ public class ParamChangeTask {
 
     final MszStageParam mszStageParam = new MszStageParam();
     mszStageParam.setId(UUID.randomUUID().toString()); //todo:?
-    mszStageParam.setMszStage(mszStage); //todo: id
-    mszStageParam.setBzMszStageParam(bzMszStageParam);
+    mszStageParam.setMszStageId(mszStage.getId()); //todo: id
+    mszStageParam.setBzMszStageParamId(bzMszStageParam.getId());
     mszStageParam.setValue(value);
     mszStageParamService.save(mszStageParam);
   }

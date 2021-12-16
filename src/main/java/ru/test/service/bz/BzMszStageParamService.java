@@ -18,24 +18,28 @@ public class BzMszStageParamService {
     BzMszStageParam bzMszStageParam;
 
     bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_1);
     bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
     bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_1);
     bzMszStageParam.setName("name1");
     mock.add(bzMszStageParam);
 
     bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_1);
     bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
     bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_1);
     bzMszStageParam.setName("name2");
     mock.add(bzMszStageParam);
 
     bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_2);
     bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
     bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_2);
     bzMszStageParam.setName("name3");
     mock.add(bzMszStageParam);
 
     bzMszStageParam = new BzMszStageParam();
+    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_3);
     bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
     bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_3);
     bzMszStageParam.setName("name4");

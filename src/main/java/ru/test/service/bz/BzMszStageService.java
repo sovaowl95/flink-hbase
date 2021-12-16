@@ -33,9 +33,12 @@ public class BzMszStageService {
 
   public Optional<BzMszStage> findByBzMszStageId(BzMszStageParam bzMszStageParam) {
     final String targetId = bzMszStageParam.getBzMszStageId();
+    return findByBzMszStageId(targetId);
+  }
 
+  public Optional<BzMszStage> findByBzMszStageId(String bzMszStageId) {
     for (BzMszStage bzMszStage : mock) {
-      if (bzMszStage.getId().equals(targetId)) {
+      if (bzMszStage.getId().equals(bzMszStageId)) {
         return Optional.of(bzMszStage);
       }
     }

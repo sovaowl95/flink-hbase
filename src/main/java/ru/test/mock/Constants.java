@@ -13,6 +13,9 @@ public class Constants {
   public static final String BZ_MSZ_STAGE_ID_2 = "7495c1d0-9fcd-49f2-b48b-d22ec3b9bdfd";
   public static final String BZ_MSZ_STAGE_ID_3 = "b9eea208-a039-4cdc-b262-a1da9eea4d18";
 
+  public static final String BZ_MSZ_STAGE_PARAM_ID_1 = "f3e66eb5-84ab-447a-b6e7-cb36424ad776";
+  public static final String BZ_MSZ_STAGE_PARAM_ID_2 = "fd2dac36-9820-4162-9f60-b86d7d1ba613";
+  public static final String BZ_MSZ_STAGE_PARAM_ID_3 = "dcd22149-b87f-4360-a2fc-c230ea3f1c13";
 
   public static final String BZ_MSZ_TRANSACTION_ID_1 = "b2c85059-0d96-4f9b-9221-4efe77b6aedd";
   public static final String BZ_MSZ_TRANSACTION_ID_2 = "47870403-ede0-4e54-be20-803af4f0bf92";
@@ -22,7 +25,6 @@ public class Constants {
   public static final String BzMszTransactionStages_Appointed = BZ_MSZ_STAGE_ID_1;
   public static final String BzMszTransactionStages_Stopped = BZ_MSZ_STAGE_ID_2;
   public static final String BzMszTransactionStages_Canceled = BZ_MSZ_STAGE_ID_3;
-
 
   public static final String BZ_MSZ_ID_1 = "da4bd578-f87b-4797-87b5-0508dbd537b3";
   public static final String BZ_MSZ_ID_2 = "a8d19e81-4120-475f-9523-3b5c331d9a8b";
