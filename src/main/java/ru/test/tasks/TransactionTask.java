@@ -85,7 +85,9 @@ public class TransactionTask {
      * проверка:
      * текущий этап == начальной точке
      */
-//    final String fromId = bzMszTransactionStages.getFromBzMszStageId();
+    final String newFromId = bzMszStage.getId();
+    final String currentId = mszStage.getId();
+
 //    final Optional<BzMszStage> bzMszStageOptionalFrom = bzMszStageService.findByBzMszStageId(fromId);
 //    //todo: очень кривая логика. нужно что-то делать с этим. кажется нужно менять блок-схему
 //    final BzMszStage from = bzMszStageOptionalFrom.orElse(null);
