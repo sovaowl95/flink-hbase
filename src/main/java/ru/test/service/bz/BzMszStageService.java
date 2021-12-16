@@ -9,24 +9,25 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class BzMszStageService {
+  //todo: mock. replace with REST
   private final ArrayList<BzMszStage> mock = new ArrayList<>();
 
   public BzMszStageService() {
     BzMszStage el;
 
     el = new BzMszStage();
-    el.setId(Constants.BzMszStage_ID_1);
-    el.setBzMszId(Constants.BzMsz_ID_1);
+    el.setId(Constants.BZ_MSZ_STAGE_ID_1);
+    el.setBzMszId(Constants.BZ_MSZ_ID_1);
     mock.add(el);
 
     el = new BzMszStage();
-    el.setId(Constants.BzMszStage_ID_2);
-    el.setBzMszId(Constants.BzMsz_ID_2);
+    el.setId(Constants.BZ_MSZ_STAGE_ID_2);
+    el.setBzMszId(Constants.BZ_MSZ_ID_2);
     mock.add(el);
 
     el = new BzMszStage();
-    el.setId(Constants.BzMszStage_ID_3);
-    el.setBzMszId(Constants.BzMsz_ID_3);
+    el.setId(Constants.BZ_MSZ_STAGE_ID_3);
+    el.setBzMszId(Constants.BZ_MSZ_ID_3);
     mock.add(el);
   }
 

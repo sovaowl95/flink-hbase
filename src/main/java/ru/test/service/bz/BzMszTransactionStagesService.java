@@ -17,6 +17,7 @@ public class BzMszTransactionStagesService {
 
     //null -> назначена
     el = new BzMszTransactionStages();
+    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_1);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Null);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Appointed);
     el.setOutputId(Constants.OUTPUT_ID_1);
@@ -24,6 +25,7 @@ public class BzMszTransactionStagesService {
 
     //назначена -> приостановлена
     el = new BzMszTransactionStages();
+    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_2);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Appointed);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Stopped);
     el.setOutputId(Constants.OUTPUT_ID_2);
@@ -31,6 +33,7 @@ public class BzMszTransactionStagesService {
 
     //приостановлен -> отменена
     el = new BzMszTransactionStages();
+    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_3);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Stopped);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Canceled);
     el.setOutputId(Constants.OUTPUT_ID_3);

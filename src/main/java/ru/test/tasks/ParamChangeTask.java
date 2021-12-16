@@ -50,10 +50,17 @@ public class ParamChangeTask {
       log.info("bzMszStage is null");
       return;
     }
-
     final BzMszStage bzMszStage = bzMszStageOptional.get();
+
+
     //todo: странный переход. уточнить. правильно ли я понял
-    final BzMsz bzMsz = bzMszService.findByBzMszStage(bzMszStage);
+    final Optional<BzMsz> bzMszOptional = bzMszService.findByBzMszStage(bzMszStage);
+    if(bzMszOptional.isEmpty()){
+      log.info("BzMsz is null");
+      return;
+    }
+    final BzMsz bzMsz = bzMszOptional.get();
+
 
     final Msz msz = mszService.findByMszAndPerson(bzMsz, personId);
 
