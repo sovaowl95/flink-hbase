@@ -4,7 +4,7 @@ import ecp.zhs.Output;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.bz.BzMszStageParamService;
 import ru.test.service.bz.BzMszStageService;
-import ru.test.service.bz.BzMszTransactionStagesService;
+import ru.test.service.bz.BzMszTransitionStagesService;
 import ru.test.service.hbase.MszService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;
@@ -21,7 +21,7 @@ public class AggregationTask implements Runnable {
     final BzMszService bzMszService = new BzMszService();
     final BzMszStageService bzMszStageService = new BzMszStageService();
     final BzMszStageParamService bzMszStageParamService = new BzMszStageParamService();
-    final BzMszTransactionStagesService bzMszTransactionStagesService = new BzMszTransactionStagesService();
+    final BzMszTransitionStagesService bzMszTransitionStagesService = new BzMszTransitionStagesService();
 
     final MszService mszService = new MszService();
     final MszStageService mszStageService = new MszStageService();
@@ -33,7 +33,7 @@ public class AggregationTask implements Runnable {
     paramChangeTask.execute(output);
 
     final TransactionTask transactionTask
-        = new TransactionTask(bzMszService, bzMszStageService, bzMszStageParamService, bzMszTransactionStagesService,
+        = new TransactionTask(bzMszService, bzMszStageService, bzMszStageParamService, bzMszTransitionStagesService,
                               mszService, mszStageService, mszStageParamService);
     transactionTask.execute(output);
   }

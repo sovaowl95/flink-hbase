@@ -6,14 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import ru.test.mock.bz.BzMsz;
 import ru.test.mock.bz.BzMszStage;
 import ru.test.mock.bz.BzMszStageParam;
-import ru.test.mock.bz.BzMszTransactionStages;
+import ru.test.mock.bz.BzMszTransition;
 import ru.test.mock.hbase.Msz;
 import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.bz.BzMszStageParamService;
 import ru.test.service.bz.BzMszStageService;
-import ru.test.service.bz.BzMszTransactionStagesService;
+import ru.test.service.bz.BzMszTransitionStagesService;
 import ru.test.service.hbase.MszService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;
@@ -30,7 +30,7 @@ public class TransactionTask {
   private final BzMszService bzMszService;
   private final BzMszStageService bzMszStageService;
   private final BzMszStageParamService bzMszStageParamService;
-  private final BzMszTransactionStagesService bzMszTransactionStagesService;
+  private final BzMszTransitionStagesService bzMszTransitionStagesService;
 
   private final MszService mszService;
   private final MszStageService mszStageService;
@@ -43,15 +43,15 @@ public class TransactionTask {
 
     //todo: if (result == true)
 
-    final var bzMszTransactionStagesOptional = bzMszTransactionStagesService.findByOutput(output);
+    final var bzMszTransactionStagesOptional = bzMszTransitionStagesService.findByOutput(output);
     if (bzMszTransactionStagesOptional.isEmpty()) {
       log.info("bzMszTransactionStages is null");
       return; //todo: обновить конфигурацию и повторить?
     }
-    final BzMszTransactionStages bzMszTransactionStages = bzMszTransactionStagesOptional.get();
+    final BzMszTransition bzMszTransition = bzMszTransactionStagesOptional.get();
 
     final Optional<BzMszStage> bzMszStageOptional
-        = bzMszStageService.findByBzMszTransactionStages(bzMszTransactionStages);
+        = bzMszStageService.findByBzMszTransactionStages(bzMszTransition);
     if (bzMszStageOptional.isEmpty()) {
       log.info("BzMszStage is null");
       return;
@@ -113,7 +113,7 @@ public class TransactionTask {
     /**
      * создать новый этап и его параметры
      */
-    final MszStage newMszStage = mszStageService.createMszStage(bzMszTransactionStages,
+    final MszStage newMszStage = mszStageService.createMszStage(bzMszTransition,
                                                                 bzMszStage,
                                                                 msz);
     mszStageService.save(newMszStage);

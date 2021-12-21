@@ -1,14 +1,16 @@
 package ru.test.service.hbase;
 
+import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MszStageParamService {
   //todo: mock. replace with REST
   private final ArrayList<MszStageParam> mock = new ArrayList<>();
 
-  public void saveAll(final ArrayList<MszStageParam> list) {
+  public void saveAll(final List<MszStageParam> list) {
     for (MszStageParam mszStageParam : list) {
       save(mszStageParam);
     }
@@ -16,5 +18,10 @@ public class MszStageParamService {
 
   public void save(MszStageParam mszStageParam) {
     //todo:
+  }
+
+  public List<MszStageParam> findAllByMszStage(MszStage mszStage) {
+    //todo:
+    return List.of();
   }
 }

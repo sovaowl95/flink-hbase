@@ -120,7 +120,7 @@
                         <configuration>
                             <protocVersion>3.7.1</protocVersion>
                             <inputDirectories>
-                                <include>src/main/java/proto</include>
+                                <include>src/main/proto</include>
                             </inputDirectories>
                             <includeStdTypes>true</includeStdTypes>
                         </configuration>

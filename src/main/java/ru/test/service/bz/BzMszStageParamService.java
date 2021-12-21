@@ -7,6 +7,7 @@ import ru.test.service.bz2.BzConfigurationService;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BzMszStageParamService {
@@ -73,5 +74,13 @@ public class BzMszStageParamService {
     }
 
     return Optional.empty();
+  }
+
+  public Optional<BzMszStageParam> findById(String mszStageId) {
+    return null; //todo:
+  }
+
+  public List<BzMszStageParam> findAll() {
+    return null;
   }
 }

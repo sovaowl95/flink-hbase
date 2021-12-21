@@ -3,7 +3,7 @@ package ru.test.mock.bz;
 import lombok.Data;
 
 @Data
-public class BzMszTransactionStages {
+public class BzMszTransition {
   private String id;
   private String outputId; //key
   private String fromBzMszStageId;

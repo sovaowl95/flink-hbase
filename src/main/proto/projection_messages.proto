@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-import "proto/state.proto";
+import "state.proto";
+import "messages.proto";
 option java_multiple_files = true;
 option java_package = "ecp.zhs";
 

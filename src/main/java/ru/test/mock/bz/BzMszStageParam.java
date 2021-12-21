@@ -8,4 +8,6 @@ public class BzMszStageParam {
   private String outputId;//key
   private String bzMszStageId;
   private String name;
+
+  private String type;
 }

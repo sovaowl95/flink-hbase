@@ -3,9 +3,10 @@ package ru.test.service.bz;
 import ru.test.mock.Constants;
 import ru.test.mock.bz.BzMszStage;
 import ru.test.mock.bz.BzMszStageParam;
-import ru.test.mock.bz.BzMszTransactionStages;
+import ru.test.mock.bz.BzMszTransition;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BzMszStageService {
@@ -45,8 +46,8 @@ public class BzMszStageService {
     return Optional.empty();
   }
 
-  public Optional<BzMszStage> findByBzMszTransactionStages(BzMszTransactionStages bzMszTransactionStages) {
-    final String targetId = bzMszTransactionStages.getFromBzMszStageId();
+  public Optional<BzMszStage> findByBzMszTransactionStages(BzMszTransition bzMszTransition) {
+    final String targetId = bzMszTransition.getFromBzMszStageId();
 
     for (BzMszStage bzMszStage : mock) {
       if (bzMszStage.getId().equals(targetId)) {
@@ -54,5 +55,9 @@ public class BzMszStageService {
       }
     }
     return Optional.empty();
+  }
+
+  public List<BzMszStage> findAll() {
+    return null;
   }
 }

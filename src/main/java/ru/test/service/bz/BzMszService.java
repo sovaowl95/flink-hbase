@@ -5,6 +5,7 @@ import ru.test.mock.bz.BzMsz;
 import ru.test.mock.bz.BzMszStage;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BzMszService {
@@ -38,5 +39,9 @@ public class BzMszService {
     }
 
     return Optional.empty();
+  }
+
+  public List<BzMsz> findAll() {
+    return mock;
   }
 }

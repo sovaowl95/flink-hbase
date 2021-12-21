@@ -2,21 +2,23 @@ package ru.test.service.bz;
 
 import ecp.zhs.Output;
 import ru.test.mock.Constants;
-import ru.test.mock.bz.BzMszTransactionStages;
+import ru.test.mock.bz.BzMszTransition;
+import ru.test.mock.hbase.MszStage;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class BzMszTransactionStagesService {
+public class BzMszTransitionStagesService {
   //todo: mock. replace with REST
-  private final ArrayList<BzMszTransactionStages> mock = new ArrayList<>();
+  private final ArrayList<BzMszTransition> mock = new ArrayList<>();
 
-  public BzMszTransactionStagesService() {
-    BzMszTransactionStages el;
+  public BzMszTransitionStagesService() {
+    BzMszTransition el;
 
     //null -> назначена
-    el = new BzMszTransactionStages();
+    el = new BzMszTransition();
     el.setId(Constants.BZ_MSZ_TRANSACTION_ID_1);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Null);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Appointed);
@@ -24,7 +26,7 @@ public class BzMszTransactionStagesService {
     mock.add(el);
 
     //назначена -> приостановлена
-    el = new BzMszTransactionStages();
+    el = new BzMszTransition();
     el.setId(Constants.BZ_MSZ_TRANSACTION_ID_2);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Appointed);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Stopped);
@@ -32,7 +34,7 @@ public class BzMszTransactionStagesService {
     mock.add(el);
 
     //приостановлен -> отменена
-    el = new BzMszTransactionStages();
+    el = new BzMszTransition();
     el.setId(Constants.BZ_MSZ_TRANSACTION_ID_3);
     el.setFromBzMszStageId(Constants.BzMszTransactionStages_Stopped);
     el.setToBzMszStageId(Constants.BzMszTransactionStages_Canceled);
@@ -41,15 +43,19 @@ public class BzMszTransactionStagesService {
   }
 
   @Nonnull
-  public Optional<BzMszTransactionStages> findByOutput(Output output) {
+  public Optional<BzMszTransition> findByOutput(Output output) {
     final String outputId = output.getOutputId();
 
-    for (BzMszTransactionStages bzMszTransactionStages : mock) {
-      if (bzMszTransactionStages.getOutputId().equals(outputId)) {
-        return Optional.of(bzMszTransactionStages);
+    for (BzMszTransition bzMszTransition : mock) {
+      if (bzMszTransition.getOutputId().equals(outputId)) {
+        return Optional.of(bzMszTransition);
       }
     }
 
     return Optional.empty();
+  }
+
+  public List<BzMszTransition> findByMszStage(MszStage mszStage) {
+    return null; //todo:
   }
 }

@@ -2,7 +2,7 @@ package ru.test.service.hbase;
 
 import ru.test.mock.Constants;
 import ru.test.mock.bz.BzMszStage;
-import ru.test.mock.bz.BzMszTransactionStages;
+import ru.test.mock.bz.BzMszTransition;
 import ru.test.mock.hbase.Msz;
 import ru.test.mock.hbase.MszStage;
 
@@ -51,13 +51,13 @@ public class MszStageService {
     return Optional.empty();
   }
 
-  public MszStage createMszStage(final BzMszTransactionStages bzMszTransactionStages,
+  public MszStage createMszStage(final BzMszTransition bzMszTransition,
                                  final BzMszStage bzMszStage,
                                  final Msz msz) {
     final MszStage mszStage = new MszStage();
     mszStage.setId(UUID.randomUUID().toString());
     mszStage.setMszId(msz.getId());
-    mszStage.setBzMszTransactionStagesId(bzMszTransactionStages.getId());
+    mszStage.setBzMszTransactionStagesId(bzMszTransition.getId());
     mszStage.setBzMszStageId(bzMszStage.getId());
     save(mszStage);
     return mszStage;
@@ -65,5 +65,10 @@ public class MszStageService {
 
   public void save(MszStage mszStage) {
     //todo:
+  }
+
+  public Optional<MszStage> findByMszOptional(Msz msz) {
+
+
   }
 }
