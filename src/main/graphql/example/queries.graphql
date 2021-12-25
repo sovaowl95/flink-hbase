@@ -1,0 +1,36 @@
+query Msz{
+    measures{
+        id, title
+    }
+}
+
+#todo: сделать без Id
+query MszTransition{
+    getTransitionsForMeasure(measureId: 123){
+        id,
+        decisionId,
+        fromStepId,
+        toStepId
+    }
+}
+
+#todo: сделать без Id
+query MszStage{
+    getStepsForMeasure(measureId: 123){
+        id,
+        measureId,
+        title
+    }
+}
+
+
+#todo: сделать без Id
+query MszStageParam{
+    getMeasureStepParameters(measureStepId: 123){
+        id,
+        title,
+        code,
+        decisionId,
+        measureStepId
+    }
+}

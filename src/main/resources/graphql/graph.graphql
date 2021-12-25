@@ -1,0 +1,112 @@
+type DmnItemDefine {
+    id: ID!,
+    name: String,
+    parentId: Int,
+    collection: Boolean
+}
+
+type InputParam {
+    id: ID
+    title: String
+    type: String
+}
+
+type Decision {
+    id: ID
+    title: String
+    type: String
+}
+
+type DmnModel {
+    id: ID,
+    title: String,
+    content: String
+    #InputParameters(коллекция), OutputParameters(Коллекция)
+    inputParams: [InputParam]
+    decisions: [Decision]
+}
+
+type Measure {
+    id: ID!,
+    title: String,
+}
+
+type MeasureStep {
+    id: ID!,
+    title: String,
+    measureId: Int
+}
+
+type MeasureStepTransition {
+    id: ID!
+    fromStepId: Int,
+    toStepId: Int!,
+    decisionId: Int!,
+    measureId: Int!
+}
+
+type LifeSituation {
+    id: ID!
+    title:String!
+    decisionId: Int!
+}
+
+type MeasureStepParameter {
+    id: ID!
+    title:String!
+    code:String!
+    decisionId: Int
+    measureStepId: Int!
+}
+
+type Query {
+    registry: [DmnItemDefine],
+    models: [DmnModel]
+    model(id: ID!):DmnModel
+
+    measures: [Measure]
+    measure(id: ID!):Measure
+
+    getStepsForMeasure(measureId: ID!): [MeasureStep]
+    getMeasureStep(id: ID!):MeasureStep
+
+    getTransitionsForMeasure(measureId: ID!): [MeasureStepTransition]
+    getTransition(transitionId: ID!): MeasureStepTransition
+
+    getTransitionsForLifeSituation(lifeSituationId: Int!): [MeasureStepTransition]
+
+    getMeasureStepParameters(measureStepId: Int!):[MeasureStepParameter]
+    getMeasureStepParameter(parameterId: Int!): MeasureStepParameter
+}
+
+type Mutation {
+    updateModel(id: ID, content: String!):DmnModel
+    createModel: DmnModel
+    deleteModel(id: ID!): ID
+
+    updateMeasure(id: ID!, title: String!):Measure
+    createMeasure(title: String!): Measure
+    deleteMeasure(id: ID!): ID
+
+    createMeasureStep(measureId: ID!, title: String!): MeasureStep
+    updateMeasureStep(stepId: ID!, title: String!): MeasureStep
+    deleteMeasureStep(stepId: ID!): ID
+
+    createStepTransition(stepFromId: Int, stepToId: Int!, measureId: Int!, decisionId: Int): MeasureStepTransition!
+    updateStepTransition(transitionId: ID!, stepFromId: Int, stepToId: Int!, measureId: Int!, decisionId: Int!):
+    MeasureStepTransition!
+    updateTransitionDecision(transitionId: ID!, decisionId: Int!): MeasureStepTransition!
+    deleteTransition(transitionId: ID!): ID
+
+    createLifeSituation(title: String!, decisionId:Int!):LifeSituation
+    updateLifeSituation(id: ID!, title: String!, decisionId:Int!):LifeSituation
+    updateDecision(id: ID!, decisionId:Int!):LifeSituation
+    assignLifeSituationWithMeasureTransition(lifeSituationId: Int!, measureStepTransitionId: Int!): ID
+    decoupleLifeSituationWithMeasureTransition(lifeSituationId: Int!, measureStepTransitionId: Int!): ID
+
+    createMeasureStepParameter(measureStepId: Int!, decisionId: Int, title: String!, code: String):MeasureStepParameter!
+    updateMeasureStepParameter(parameterId: Int!, measureStepId: Int!, decisionId: Int, title: String!, code: String)
+    :MeasureStepParameter!
+    updateMeasureStepParameterDecision(parameterId: Int!, decisionId: Int):MeasureStepParameter!
+    deleteMeasureStepParameter(parameterId: Int!):ID
+}

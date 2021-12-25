@@ -1,0 +1,1 @@
+https://github.com/aoudiamoncef/apollo-client-maven-plugin

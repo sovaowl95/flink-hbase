@@ -1,61 +1,62 @@
 package ru.test.service.bz;
 
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import ecp.zhs.Output;
-import ru.test.mock.Constants;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import ru.MszTransitionQuery;
 import ru.test.mock.bz.BzMszTransition;
-import ru.test.mock.hbase.MszStage;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 public class BzMszTransitionStagesService {
-  //todo: mock. replace with REST
-  private final ArrayList<BzMszTransition> mock = new ArrayList<>();
+  private static final Map<String, BzMszTransition> MAP_OUTPUT_ID = new HashMap<>();
+  private final ApolloClient apolloClient;
 
-  public BzMszTransitionStagesService() {
-    BzMszTransition el;
-
-    //null -> назначена
-    el = new BzMszTransition();
-    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_1);
-    el.setFromBzMszStageId(Constants.BzMszTransactionStages_Null);
-    el.setToBzMszStageId(Constants.BzMszTransactionStages_Appointed);
-    el.setOutputId(Constants.OUTPUT_ID_1);
-    mock.add(el);
-
-    //назначена -> приостановлена
-    el = new BzMszTransition();
-    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_2);
-    el.setFromBzMszStageId(Constants.BzMszTransactionStages_Appointed);
-    el.setToBzMszStageId(Constants.BzMszTransactionStages_Stopped);
-    el.setOutputId(Constants.OUTPUT_ID_2);
-    mock.add(el);
-
-    //приостановлен -> отменена
-    el = new BzMszTransition();
-    el.setId(Constants.BZ_MSZ_TRANSACTION_ID_3);
-    el.setFromBzMszStageId(Constants.BzMszTransactionStages_Stopped);
-    el.setToBzMszStageId(Constants.BzMszTransactionStages_Canceled);
-    el.setOutputId(Constants.OUTPUT_ID_3);
-    mock.add(el);
+  public BzMszTransitionStagesService(ApolloClient apolloClient) {
+    this.apolloClient = apolloClient;
+    updateConfig();
   }
 
   @Nonnull
   public Optional<BzMszTransition> findByOutput(Output output) {
     final String outputId = output.getOutputId();
-
-    for (BzMszTransition bzMszTransition : mock) {
-      if (bzMszTransition.getOutputId().equals(outputId)) {
-        return Optional.of(bzMszTransition);
-      }
-    }
-
-    return Optional.empty();
+    return Optional.of(MAP_OUTPUT_ID.get(outputId));
   }
 
-  public List<BzMszTransition> findByMszStage(MszStage mszStage) {
-    return null; //todo:
+
+  private void updateConfig() {
+    final ApolloCall.Callback<MszTransitionQuery.Data> callback = new ApolloCall.Callback<>() {
+      @Override
+      public void onResponse(@NotNull Response<MszTransitionQuery.Data> response) {
+        if (response.getData() != null && response.getData().getTransitionsForMeasure() != null) {
+          final var transitionsForMeasure
+              = response.getData().getTransitionsForMeasure();
+          for (MszTransitionQuery.GetTransitionsForMeasure stepsForMeasure : transitionsForMeasure) {
+            final BzMszTransition bzMszTransition = new BzMszTransition();
+            bzMszTransition.setId(stepsForMeasure.id());
+            bzMszTransition.setOutputId(String.valueOf(stepsForMeasure.decisionId()));
+            bzMszTransition.setFromBzMszStageId(String.valueOf(stepsForMeasure.fromStepId()));
+            bzMszTransition.setToBzMszStageId(String.valueOf(stepsForMeasure.toStepId()));
+            MAP_OUTPUT_ID.put(bzMszTransition.getOutputId(), bzMszTransition);
+          }
+        }
+      }
+
+      @Override
+      public void onFailure(@NotNull ApolloException e) {
+        log.info("e = " + e);
+      }
+    };
+
+    apolloClient.query(ru.MszTransitionQuery.builder().build())
+                .enqueue(callback);
   }
 }

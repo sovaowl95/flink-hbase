@@ -1,63 +1,65 @@
 package ru.test.service.bz;
 
-import ru.test.mock.Constants;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import ru.MszStageQuery;
 import ru.test.mock.bz.BzMszStage;
 import ru.test.mock.bz.BzMszStageParam;
 import ru.test.mock.bz.BzMszTransition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 public class BzMszStageService {
-  //todo: mock. replace with REST
-  private final ArrayList<BzMszStage> mock = new ArrayList<>();
+  private static final Map<String, BzMszStage> MAP_ID = new HashMap<>();
+  private static final Map<String, BzMszStage> MAP_STAGE_ID = new HashMap<>();
+  private final ApolloClient apolloClient;
 
-  public BzMszStageService() {
-    BzMszStage el;
-
-    el = new BzMszStage();
-    el.setId(Constants.BZ_MSZ_STAGE_ID_1);
-    el.setBzMszId(Constants.BZ_MSZ_ID_1);
-    mock.add(el);
-
-    el = new BzMszStage();
-    el.setId(Constants.BZ_MSZ_STAGE_ID_2);
-    el.setBzMszId(Constants.BZ_MSZ_ID_2);
-    mock.add(el);
-
-    el = new BzMszStage();
-    el.setId(Constants.BZ_MSZ_STAGE_ID_3);
-    el.setBzMszId(Constants.BZ_MSZ_ID_3);
-    mock.add(el);
+  public BzMszStageService(ApolloClient apolloClient) {
+    this.apolloClient = apolloClient;
+    updateConfig();
   }
 
   public Optional<BzMszStage> findByBzMszStageId(BzMszStageParam bzMszStageParam) {
-    final String targetId = bzMszStageParam.getBzMszStageId();
-    return findByBzMszStageId(targetId);
+    final String bzMszStageId = bzMszStageParam.getBzMszStageId();
+    return Optional.of(MAP_STAGE_ID.get(bzMszStageId));
   }
 
-  public Optional<BzMszStage> findByBzMszStageId(String bzMszStageId) {
-    for (BzMszStage bzMszStage : mock) {
-      if (bzMszStage.getId().equals(bzMszStageId)) {
-        return Optional.of(bzMszStage);
-      }
-    }
-    return Optional.empty();
-  }
 
   public Optional<BzMszStage> findByBzMszTransactionStages(BzMszTransition bzMszTransition) {
     final String targetId = bzMszTransition.getFromBzMszStageId();
+    return Optional.of(MAP_ID.get(targetId));
 
-    for (BzMszStage bzMszStage : mock) {
-      if (bzMszStage.getId().equals(targetId)) {
-        return Optional.of(bzMszStage);
-      }
-    }
-    return Optional.empty();
   }
 
-  public List<BzMszStage> findAll() {
-    return null;
+  private void updateConfig() {
+    final ApolloCall.Callback<MszStageQuery.Data> callback = new ApolloCall.Callback<>() {
+      @Override
+      public void onResponse(@NotNull Response<MszStageQuery.Data> response) {
+        if (response.getData() != null && response.getData().getStepsForMeasure() != null) {
+          for (MszStageQuery.GetStepsForMeasure getStepsForMeasure : response.getData().getStepsForMeasure()) {
+            final BzMszStage bzMszStage = new BzMszStage();
+            bzMszStage.setId(getStepsForMeasure.id());
+            bzMszStage.setBzMszId(String.valueOf(getStepsForMeasure.measureId()));
+            MAP_ID.put(bzMszStage.getId(), bzMszStage);
+            MAP_STAGE_ID.put(bzMszStage.getBzMszId(), bzMszStage);
+          }
+        }
+      }
+
+      @Override
+      public void onFailure(@NotNull ApolloException e) {
+        log.info("e = " + e);
+      }
+    };
+
+    apolloClient.query(ru.MszStageQuery.builder().build())
+                .enqueue(callback);
   }
 }

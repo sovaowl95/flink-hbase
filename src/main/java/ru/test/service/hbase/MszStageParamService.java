@@ -1,5 +1,6 @@
 package ru.test.service.hbase;
 
+import ru.test.mock.bz.BzMszStageParam;
 import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
 
@@ -23,5 +24,9 @@ public class MszStageParamService {
   public List<MszStageParam> findAllByMszStage(MszStage mszStage) {
     //todo:
     return List.of();
+  }
+
+  public MszStageParam create(BzMszStageParam bzMszStageParam) {
+    return null;
   }
 }

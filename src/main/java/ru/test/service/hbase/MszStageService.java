@@ -68,7 +68,6 @@ public class MszStageService {
   }
 
   public Optional<MszStage> findByMszOptional(Msz msz) {
-
-
+    return null;
   }
 }

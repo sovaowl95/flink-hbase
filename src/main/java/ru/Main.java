@@ -1,20 +1,64 @@
 package ru;
 
+
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.hadoop.conf.Configuration;
-import ru.client.HBaseClientV2;
-import ru.config.Hbase;
+import org.jetbrains.annotations.NotNull;
+import ru.test.service.bz.BzMszService;
+import ru.test.service.bz.BzMszStageParamService;
+import ru.test.service.bz.BzMszStageService;
+import ru.test.service.bz.BzMszTransitionStagesService;
+
 
 @Slf4j
 public class Main {
   public static final int BUFFER_FLUSH_MAX_SIZE_IN_BYTES = 100_000;
+  public static final String HTTP_LOCALHOST_8080_GRAPHQL = "http://localhost:8080/graphql";
 
   public static void main(String[] args) throws Exception {
-    final Configuration configuration = Hbase.createConfiguration();
+//    final Configuration configuration = Hbase.createConfiguration();
+//
+//    final HBaseClientV2 hBaseClientV2 = new HBaseClientV2(configuration);
+//
+//    MigrationService.migrate(hBaseClientV2);
 
-    final HBaseClientV2 hBaseClientV2 = new HBaseClientV2(configuration);
+    final ApolloClient apolloClient = ApolloClient.builder()
+                                                  .serverUrl(HTTP_LOCALHOST_8080_GRAPHQL)
+                                                  .build();
 
-    MigrationService.migrate(hBaseClientV2);
+
+
+
+    final BzMszService bzMszService = new BzMszService(apolloClient);
+    final BzMszStageService bzMszStageService = new BzMszStageService(apolloClient);
+    final BzMszStageParamService bzMszStageParamService = new BzMszStageParamService(apolloClient);
+    final BzMszTransitionStagesService bzMszTransitionStagesService = new BzMszTransitionStagesService(apolloClient);
+
+
+//    com.graphql.model.CreateMeasureStepMutation
+
+//    final DefaultGraphQLClient defaultGraphQLClient = new DefaultGraphQLClient(HTTP_LOCALHOST_8080_GRAPHQL);
+//    defaultGraphQLClient.
+
+    //    final graph.QMeasures measures = graph.QMeasures.builder().build();
+//    final var measuresList
+//        = measures.request(HTTP_LOCALHOST_8080_GRAPHQL)
+//                  .get().getMeasures();
+//
+//    for (graph.QMeasures.Result.measures v : measuresList) {
+//      System.out.println("v = " + v);
+//    }
+
+
+//    final dmn.Query query = dmn..builder()
+//                                         .withMeasures()
+//                                         .build();
+
+
+//    query.
 
 
 //    final HBaseMutationConverter mutationConverter = new MockTableMutationConverter();

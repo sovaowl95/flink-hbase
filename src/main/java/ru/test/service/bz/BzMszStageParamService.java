@@ -1,86 +1,65 @@
 package ru.test.service.bz;
 
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import ecp.zhs.Output;
-import ru.test.mock.Constants;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import ru.MszStageParamQuery;
 import ru.test.mock.bz.BzMszStageParam;
-import ru.test.service.bz2.BzConfigurationService;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 public class BzMszStageParamService {
-  //todo: mock. replace with REST
-  final ArrayList<BzMszStageParam> mock = new ArrayList<>();
-  private final BzConfigurationService bzConfigurationService = new BzConfigurationService();
+  private static final Map<String, BzMszStageParam> MAP = new HashMap<>();
+  private final ApolloClient apolloClient;
 
-  public BzMszStageParamService() {
-    BzMszStageParam bzMszStageParam;
-
-    bzMszStageParam = new BzMszStageParam();
-    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_1);
-    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
-    bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_1);
-    bzMszStageParam.setName("name1");
-    mock.add(bzMszStageParam);
-
-    bzMszStageParam = new BzMszStageParam();
-    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_1);
-    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_1);
-    bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_1);
-    bzMszStageParam.setName("name2");
-    mock.add(bzMszStageParam);
-
-    bzMszStageParam = new BzMszStageParam();
-    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_2);
-    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
-    bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_2);
-    bzMszStageParam.setName("name3");
-    mock.add(bzMszStageParam);
-
-    bzMszStageParam = new BzMszStageParam();
-    bzMszStageParam.setId(Constants.BZ_MSZ_STAGE_PARAM_ID_3);
-    bzMszStageParam.setOutputId(Constants.OUTPUT_ID_3);
-    bzMszStageParam.setBzMszStageId(Constants.BZ_MSZ_STAGE_ID_3);
-    bzMszStageParam.setName("name4");
-    mock.add(bzMszStageParam);
+  public BzMszStageParamService(ApolloClient apolloClient) {
+    this.apolloClient = apolloClient;
+    updateConfig();
   }
-
 
   @Nonnull
   public Optional<BzMszStageParam> findByOutput(Output output) {
-    final String outputId = output.getOutputId();
-    int tries = 3;
-    while (tries-- > 0) {
-      final Optional<BzMszStageParam> bzMszStageParamOptional = findByOutputId(outputId);
-      if (bzMszStageParamOptional.isPresent()) {
-        return bzMszStageParamOptional;
-      }
-      bzConfigurationService.updateConfig();
-      //todo: обновить конфигурацию и повторить?
-      //todo: или можно как-то reject, чтобы обработать позже?
-      //todo: например, если еще не обновился конфиг (не успел), а уже прилетают задачи
-
-    }
-    return Optional.empty();
+    return findByOutputId(output.getOutputId());
   }
 
   public Optional<BzMszStageParam> findByOutputId(final String outputId) {
-    for (BzMszStageParam bzMszStageParam : mock) {
-      if (bzMszStageParam.getOutputId().equals(outputId)) {
-        return Optional.of(bzMszStageParam);
+    return Optional.of(MAP.get(outputId));
+  }
+
+  private void updateConfig() {
+    final ApolloCall.Callback<MszStageParamQuery.Data> callback = new ApolloCall.Callback<>() {
+      @Override
+      public void onResponse(@NotNull Response<MszStageParamQuery.Data> response) {
+        if (response.getData() != null && response.getData().getMeasureStepParameters() != null) {
+          final var measureStepParameters = response.getData().getMeasureStepParameters();
+          for (var measureStepParameter : measureStepParameters) {
+            final BzMszStageParam bzMszStageParam = new BzMszStageParam();
+            bzMszStageParam.setId(measureStepParameter.id());
+            bzMszStageParam.setOutputId(String.valueOf(measureStepParameter.decisionId()));
+            bzMszStageParam.setBzMszStageId(String.valueOf(measureStepParameter.measureStepId()));
+            bzMszStageParam.setTitle(measureStepParameter.title());
+            bzMszStageParam.setType(measureStepParameter.code());
+
+            MAP.put(bzMszStageParam.getOutputId(), bzMszStageParam);
+          }
+        }
       }
-    }
 
-    return Optional.empty();
-  }
+      @Override
+      public void onFailure(@NotNull ApolloException e) {
+        log.info("e = " + e);
+      }
+    };
 
-  public Optional<BzMszStageParam> findById(String mszStageId) {
-    return null; //todo:
-  }
-
-  public List<BzMszStageParam> findAll() {
-    return null;
+    apolloClient.query(ru.MszStageParamQuery.builder().build())
+                .enqueue(callback);
   }
 }
