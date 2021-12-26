@@ -11,16 +11,17 @@ import ru.MszTransitionQuery;
 import ru.test.mock.bz.BzMszTransition;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-public class BzMszTransitionStagesService {
+public class BzMszTransitionService {
   private static final Map<String, BzMszTransition> MAP_OUTPUT_ID = new HashMap<>();
   private final ApolloClient apolloClient;
 
-  public BzMszTransitionStagesService(ApolloClient apolloClient) {
+  public BzMszTransitionService(ApolloClient apolloClient) {
     this.apolloClient = apolloClient;
     updateConfig();
   }
@@ -31,6 +32,10 @@ public class BzMszTransitionStagesService {
     return Optional.of(MAP_OUTPUT_ID.get(outputId));
   }
 
+  @Nonnull
+  public Collection<BzMszTransition> findAll() {
+    return MAP_OUTPUT_ID.values();
+  }
 
   private void updateConfig() {
     final ApolloCall.Callback<MszTransitionQuery.Data> callback = new ApolloCall.Callback<>() {

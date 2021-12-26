@@ -1,16 +1,12 @@
 package ru;
 
 
-import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.bz.BzMszStageParamService;
 import ru.test.service.bz.BzMszStageService;
-import ru.test.service.bz.BzMszTransitionStagesService;
+import ru.test.service.bz.BzMszTransitionService;
 
 
 @Slf4j
@@ -35,7 +31,7 @@ public class Main {
     final BzMszService bzMszService = new BzMszService(apolloClient);
     final BzMszStageService bzMszStageService = new BzMszStageService(apolloClient);
     final BzMszStageParamService bzMszStageParamService = new BzMszStageParamService(apolloClient);
-    final BzMszTransitionStagesService bzMszTransitionStagesService = new BzMszTransitionStagesService(apolloClient);
+    final BzMszTransitionService bzMszTransitionService = new BzMszTransitionService(apolloClient);
 
 
 //    com.graphql.model.CreateMeasureStepMutation

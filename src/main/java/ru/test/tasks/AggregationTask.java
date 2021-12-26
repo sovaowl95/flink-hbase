@@ -1,10 +1,6 @@
 package ru.test.tasks;
 
 import ecp.zhs.Output;
-import ru.test.service.bz.BzMszService;
-import ru.test.service.bz.BzMszStageParamService;
-import ru.test.service.bz.BzMszStageService;
-import ru.test.service.bz.BzMszTransitionStagesService;
 import ru.test.service.hbase.MszService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;

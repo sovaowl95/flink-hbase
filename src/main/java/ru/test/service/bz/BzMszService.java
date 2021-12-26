@@ -10,6 +10,7 @@ import ru.MszQuery;
 import ru.test.mock.bz.BzMsz;
 import ru.test.mock.bz.BzMszStage;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +28,10 @@ public class BzMszService {
   public Optional<BzMsz> findByBzMszStage(BzMszStage bzMszStage) {
     final String targetId = bzMszStage.getId();
     return Optional.of(MAP.get(targetId));
+  }
+
+  public Collection<BzMsz> getAll() {
+    return MAP.values();
   }
 
   private void updateConfig() {

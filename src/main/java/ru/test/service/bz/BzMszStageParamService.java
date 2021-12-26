@@ -11,6 +11,7 @@ import ru.MszStageParamQuery;
 import ru.test.mock.bz.BzMszStageParam;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -61,5 +62,10 @@ public class BzMszStageParamService {
 
     apolloClient.query(ru.MszStageParamQuery.builder().build())
                 .enqueue(callback);
+  }
+
+  @Nonnull
+  public Collection<BzMszStageParam> getAll() {
+    return MAP.values();
   }
 }

@@ -13,7 +13,7 @@ import ru.test.mock.hbase.MszStageParam;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.bz.BzMszStageParamService;
 import ru.test.service.bz.BzMszStageService;
-import ru.test.service.bz.BzMszTransitionStagesService;
+import ru.test.service.bz.BzMszTransitionService;
 import ru.test.service.hbase.MszService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;
@@ -30,7 +30,7 @@ public class TransactionTask {
   private final BzMszService bzMszService;
   private final BzMszStageService bzMszStageService;
   private final BzMszStageParamService bzMszStageParamService;
-  private final BzMszTransitionStagesService bzMszTransitionStagesService;
+  private final BzMszTransitionService bzMszTransitionService;
 
   private final MszService mszService;
   private final MszStageService mszStageService;
@@ -43,7 +43,7 @@ public class TransactionTask {
 
     //todo: if (result == true)
 
-    final var bzMszTransactionStagesOptional = bzMszTransitionStagesService.findByOutput(output);
+    final var bzMszTransactionStagesOptional = bzMszTransitionService.findByOutput(output);
     if (bzMszTransactionStagesOptional.isEmpty()) {
       log.info("bzMszTransactionStages is null");
       return; //todo: обновить конфигурацию и повторить?
