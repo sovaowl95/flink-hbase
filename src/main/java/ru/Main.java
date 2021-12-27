@@ -7,10 +7,10 @@
 //import ru.client.HBaseClientV2;
 //import ru.config.Hbase;
 //import ru.migration.MigrationService;
-//import ru.test.service.bz.BzMszService;
-//import ru.test.service.bz.BzMszParamService;
-//import ru.test.service.bz.BzMszStageService;
-//import ru.test.service.bz.BzMszTransitionService;
+//import ru.test2.service.bz.BzMszService;
+//import ru.test2.service.bz.BzMszParamService;
+//import ru.test2.service.bz.BzMszStageService;
+//import ru.test2.service.bz.BzMszTransitionService;
 //
 //
 //@Slf4j

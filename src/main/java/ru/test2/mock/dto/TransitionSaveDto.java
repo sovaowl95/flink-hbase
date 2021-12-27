@@ -1,9 +1,9 @@
-package ru.test2.dto;
+package ru.test2.mock.dto;
 
 import lombok.Data;
-import ru.test.mock.hbase.Msz;
-import ru.test.mock.hbase.MszStage;
-import ru.test.mock.hbase.MszStageParam;
+import ru.test2.mock.hbase.Msz;
+import ru.test2.mock.hbase.MszStage;
+import ru.test2.mock.hbase.MszStageParam;
 
 import java.util.ArrayList;
 import java.util.List;

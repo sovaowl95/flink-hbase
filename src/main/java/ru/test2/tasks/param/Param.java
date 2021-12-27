@@ -1,20 +1,14 @@
 package ru.test2.tasks.param;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.BoolValue;
-import com.google.protobuf.BytesValue;
-import com.google.protobuf.Int64Value;
-import com.google.protobuf.StringValue;
 import ecp.zhs.Output;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import ru.test.mock.bz.BzMszStageParam;
-import ru.test.mock.hbase.Msz;
-import ru.test.mock.hbase.MszStage;
-import ru.test.mock.hbase.MszStageParam;
-import ru.test.service.bz.BzMszParamService;
-import ru.test.service.hbase.MszStageParamService;
-import ru.test.service.hbase.MszStageService;
+import ru.test2.mock.bz.BzMszStageParam;
+import ru.test2.mock.hbase.Msz;
+import ru.test2.mock.hbase.MszStage;
+import ru.test2.mock.hbase.MszStageParam;
+import ru.test2.service.bz.BzMszParamService;
+import ru.test2.service.hbase.MszStageParamService;
+import ru.test2.service.hbase.MszStageService;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -60,37 +54,14 @@ public class Param {
 
       //если значение изменено или это НАСИЛЬНОЕ обновление :D
       if (changedOutputs.contains(outputId) || force) {
-        final Object valueUnpacked = unpack(output.getValue(),
-                                            bzMszStageParam.getType());
-
-        final MszStageParam mszStageParam = mszStageParamService.create(mszStage.getId(),
-                                                                        bzMszStageParam,
-                                                                        valueUnpacked);
-        savable.add(mszStageParam);
+        savable.add(mszStageParamService.create(mszStage.getId(),
+                                                bzMszStageParam,
+                                                output));
       }
     }
 
     return savable;
   }
 
-  @SneakyThrows
-  private Object unpack(final Any anyValue,
-                        final String type) {
-    switch (type) {
-      case "String": {
-        return anyValue.unpack(StringValue.class);
-      }
-      case "Integer": {
-        return anyValue.unpack(Int64Value.class);
-      }
-      case "Boolean": {
-        return anyValue.unpack(BoolValue.class);
-      }
-      case "Bytes": {
-        return anyValue.unpack(BytesValue.class);
-      }
-      default:
-        throw new RuntimeException("unknown type");
-    }
-  }
+
 }

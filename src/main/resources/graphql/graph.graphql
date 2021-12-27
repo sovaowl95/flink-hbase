@@ -26,6 +26,7 @@ type DmnModel {
     decisions: [Decision]
 }
 
+
 type Measure {
     id: ID!,
     title: String,
@@ -69,14 +70,17 @@ type Query {
 
     getStepsForMeasure(measureId: ID!): [MeasureStep]
     getMeasureStep(id: ID!):MeasureStep
+    getMeasureSteps: [MeasureStep]
 
     getTransitionsForMeasure(measureId: ID!): [MeasureStepTransition]
     getTransition(transitionId: ID!): MeasureStepTransition
+    getTransitions:[MeasureStepTransition]
 
     getTransitionsForLifeSituation(lifeSituationId: Int!): [MeasureStepTransition]
 
     getMeasureStepParameters(measureStepId: Int!):[MeasureStepParameter]
     getMeasureStepParameter(parameterId: Int!): MeasureStepParameter
+    getStepParameters:[MeasureStepParameter]
 }
 
 type Mutation {

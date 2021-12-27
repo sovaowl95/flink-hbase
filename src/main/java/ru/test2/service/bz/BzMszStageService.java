@@ -1,4 +1,4 @@
-//package ru.test.service.bz;
+//package ru.test2.service.bz;
 //
 //import com.apollographql.apollo.ApolloCall;
 //import com.apollographql.apollo.ApolloClient;
@@ -7,9 +7,9 @@
 //import lombok.extern.slf4j.Slf4j;
 //import org.jetbrains.annotations.NotNull;
 //import ru.MszStageQuery;
-//import ru.test.mock.bz.BzMszStage;
-//import ru.test.mock.bz.BzMszStageParam;
-//import ru.test.mock.bz.BzMszTransition;
+//import ru.test2.mock.bz.BzMszStage;
+//import ru.test2.mock.bz.BzMszStageParam;
+//import ru.test2.mock.bz.BzMszTransition;
 //
 //import java.util.HashMap;
 //import java.util.Map;

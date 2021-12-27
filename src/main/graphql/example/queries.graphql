@@ -4,9 +4,8 @@ query Msz{
     }
 }
 
-#todo: сделать без Id
 query MszTransition{
-    getTransitionsForMeasure(measureId: 123){
+    getTransitions{
         id,
         decisionId,
         fromStepId,
@@ -14,9 +13,8 @@ query MszTransition{
     }
 }
 
-#todo: сделать без Id
 query MszStage{
-    getStepsForMeasure(measureId: 123){
+    getMeasureSteps{
         id,
         measureId,
         title
@@ -24,9 +22,8 @@ query MszStage{
 }
 
 
-#todo: сделать без Id
 query MszStageParam{
-    getMeasureStepParameters(measureStepId: 123){
+    getStepParameters{
         id,
         title,
         code,

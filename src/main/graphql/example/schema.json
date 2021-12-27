@@ -175,6 +175,22 @@
               "deprecationReason": null
             },
             {
+              "name": "getMeasureSteps",
+              "description": "",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "MeasureStep",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "getTransitionsForMeasure",
               "description": "",
               "args": [
@@ -228,6 +244,22 @@
                 "kind": "OBJECT",
                 "name": "MeasureStepTransition",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "getTransitions",
+              "description": "",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "MeasureStepTransition",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -317,6 +349,22 @@
                 "kind": "OBJECT",
                 "name": "MeasureStepParameter",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "getStepParameters",
+              "description": "",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "MeasureStepParameter",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

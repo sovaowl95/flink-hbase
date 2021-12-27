@@ -1,4 +1,4 @@
-package ru.test.mock.bz;
+package ru.test2.mock.bz;
 
 import lombok.Data;
 

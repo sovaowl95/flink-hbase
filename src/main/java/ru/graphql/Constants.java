@@ -1,4 +1,4 @@
-//package ru.test.mock;
+//package ru.test2.mock;
 //
 //public class Constants {
 //  private Constants() {

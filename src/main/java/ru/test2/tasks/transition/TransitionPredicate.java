@@ -1,19 +1,19 @@
 package ru.test2.tasks.transition;
 
 import org.jetbrains.annotations.NotNull;
-import ru.test.mock.bz.BzMszTransition;
-import ru.test.mock.hbase.MszStage;
+import ru.test2.mock.bz.BzMszTransition;
+import ru.test2.mock.hbase.MszStage;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-class TransitionPredicate {
+public class TransitionPredicate {
   private TransitionPredicate() {
   }
 
   @NotNull
-  static Predicate<BzMszTransition> getPredicate(@Nonnull final Optional<MszStage> mszStageOptional) {
+  public static Predicate<BzMszTransition> getPredicate(@Nonnull final Optional<MszStage> mszStageOptional) {
     final Predicate<BzMszTransition> bzMszTransitionPredicate;
     if (mszStageOptional.isEmpty()
         || mszStageOptional.get().getBzMszTransactionStagesId() == null) {

@@ -3,23 +3,28 @@ package ru.test2;
 import com.apollographql.apollo.ApolloClient;
 import ecp.zhs.Output;
 import ecp.zhs.WaveStateUpdate;
-import ru.test.mock.bz.BzMsz;
-import ru.test.mock.hbase.Msz;
-import ru.test.mock.hbase.MszStageParam;
-import ru.test.service.bz.BzMszParamService;
-import ru.test.service.bz.BzMszService;
-import ru.test.service.bz.BzMszTransitionService;
-import ru.test.service.hbase.MszService;
-import ru.test.service.hbase.MszStageParamService;
-import ru.test.service.hbase.MszStageService;
-import ru.test2.dto.TransitionSaveDto;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import ru.test2.mock.bz.BzMsz;
+import ru.test2.mock.dto.TransitionSaveDto;
+import ru.test2.mock.hbase.Msz;
+import ru.test2.mock.hbase.MszStageParam;
+import ru.test2.repository.MszRepository;
+import ru.test2.repository.MszStageParamRepository;
+import ru.test2.repository.MszStageRepository;
+import ru.test2.service.bz.BzMszParamService;
+import ru.test2.service.bz.BzMszService;
+import ru.test2.service.bz.BzMszTransitionService;
+import ru.test2.service.hbase.MszService;
+import ru.test2.service.hbase.MszStageParamService;
+import ru.test2.service.hbase.MszStageService;
 import ru.test2.tasks.param.Param;
 import ru.test2.tasks.transition.Transition;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class EntryPoint {
@@ -40,13 +45,21 @@ public class EntryPoint {
   private final ApolloClient apolloClient;
 
   public EntryPoint() {
+    final String userName = "pfr";
+    final String password = "pfr";
+    final String url = "jdbc:postgresql://localhost:5433/pfr";
+    final DSLContext dslContext = DSL.using(url, userName, password);
+    final MszRepository mszRepository = new MszRepository(dslContext);
+    final MszStageRepository mszStageRepository = new MszStageRepository(dslContext);
+    final MszStageParamRepository mszStageParamRepository = new MszStageParamRepository(dslContext);
+
     apolloClient = ApolloClient.builder()
                                .serverUrl(HTTP_LOCALHOST_8080_GRAPHQL)
                                .build();
 
-    mszService = new MszService();
-    mszStageService = new MszStageService();
-    mszStageParamService = new MszStageParamService();
+    mszService = new MszService(mszRepository);
+    mszStageService = new MszStageService(mszStageRepository);
+    mszStageParamService = new MszStageParamService(mszStageParamRepository);
 
     bzMszService = new BzMszService(apolloClient);
     bzMszParamService = new BzMszParamService(apolloClient);
@@ -54,6 +67,8 @@ public class EntryPoint {
 
     param = new Param(mszStageService, mszStageParamService, bzMszParamService);
     transition = new Transition(mszStageService, mszStageParamService, bzMszParamService, bzMszTransitionService);
+
+
   }
 
   public void go(final String personId,
@@ -67,21 +82,21 @@ public class EntryPoint {
                                         .map(Output::getOutputId))
                          .collect(Collectors.toSet());
 
-    final HashMap<BzMsz, Msz> bzMszToUserMsz = mszService.createMszMap(personId,
-                                                                       bzMszService.getAll());
+    final Map<BzMsz, Optional<Msz>> bzMszToUserMsz = mszService.createMszMap(personId,
+                                                                             bzMszService.getAll());
 
     List<MszStageParam> save1 = null;
     List<TransitionSaveDto> save2 = null;
 
-    //пройтись по каждому возможному МСЗ. по идее.. нужно еще фильтровать по OutputId
-    for (Map.Entry<BzMsz, Msz> entry : bzMszToUserMsz.entrySet()) {
+    //пройтись по каждому возможному МСЗ.
+    // todo: по идее нужно еще фильтровать по OutputId
+    for (Map.Entry<BzMsz, Optional<Msz>> entry : bzMszToUserMsz.entrySet()) {
       final BzMsz bzMsz = entry.getKey();
-      final Msz msz = entry.getValue();
-
-      if (msz != null) {
-        save1 = param.updateParams(outputsMap, msz, changedOutputs, false);
+      final Optional<Msz> mszOptional = entry.getValue();
+      if (mszOptional.isPresent()) {
+        save1 = param.updateParams(outputsMap, mszOptional.get(), changedOutputs, false);
       }
-      save2 = transition.transition(outputsMap, msz, personId, bzMsz);
+      save2 = transition.transition(outputsMap, mszOptional, personId, bzMsz);
     }
 
     saveAll(save1, save2);

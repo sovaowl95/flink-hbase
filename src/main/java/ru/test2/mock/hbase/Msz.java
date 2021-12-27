@@ -1,4 +1,4 @@
-package ru.test.mock.hbase;
+package ru.test2.mock.hbase;
 
 import lombok.Data;
 

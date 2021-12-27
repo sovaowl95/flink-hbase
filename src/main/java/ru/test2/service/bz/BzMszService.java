@@ -1,4 +1,4 @@
-package ru.test.service.bz;
+package ru.test2.service.bz;
 
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
@@ -7,7 +7,7 @@ import com.apollographql.apollo.exception.ApolloException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.MszQuery;
-import ru.test.mock.bz.BzMsz;
+import ru.test2.mock.bz.BzMsz;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,6 +38,8 @@ public class BzMszService {
             MAP.put(bzMsz.getId(), bzMsz);
           }
         }
+
+        log.info("BzMszService init complete");
       }
 
       @Override
