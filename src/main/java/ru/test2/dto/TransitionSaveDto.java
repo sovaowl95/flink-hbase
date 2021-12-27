@@ -1,4 +1,4 @@
-package ru.test2.tasks.transition.dto;
+package ru.test2.dto;
 
 import lombok.Data;
 import ru.test.mock.hbase.Msz;

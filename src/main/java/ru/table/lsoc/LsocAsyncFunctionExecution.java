@@ -1,4 +1,4 @@
-package ru.table.lsoc;
-
-public class LsocAsyncFunctionExecution {
-}
+//package ru.table.lsoc;
+//
+//public class LsocAsyncFunctionExecution {
+//}

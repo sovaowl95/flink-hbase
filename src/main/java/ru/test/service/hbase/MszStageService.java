@@ -1,5 +1,6 @@
 package ru.test.service.hbase;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.test.mock.Constants;
 import ru.test.mock.bz.BzMszStage;
 import ru.test.mock.bz.BzMszTransition;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 public class MszStageService {
   //todo: mock. replace with REST
   private final ArrayList<MszStage> mock = new ArrayList<>();
@@ -39,7 +41,7 @@ public class MszStageService {
     mock.add(mszStage);
   }
 
-  public Optional<MszStage> findByMsz(Msz msz) {
+  public Optional<MszStage> findByMszId(String mszId) {
     final String targetId = msz.getId();
 
     for (MszStage mszStage : mock) {
@@ -52,6 +54,10 @@ public class MszStageService {
   }
 
   //todo: refactoring
+  public Optional<MszStage> findByMszOptional(Msz msz) {
+    return null;
+  }
+
   public MszStage createMszStage(final BzMszTransition bzMszTransition,
                                  final BzMszStage bzMszStage,
                                  final Msz msz) {
@@ -64,10 +70,6 @@ public class MszStageService {
   }
 
   public void save(MszStage mszStage) {
-    //todo:
-  }
-
-  public Optional<MszStage> findByMszOptional(Msz msz) {
-    return null;
+    log.info("SAVING MszStage " + mszStage);
   }
 }

@@ -1,15 +1,29 @@
 package ru.test.service.hbase;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.test.mock.bz.BzMszStageParam;
-import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 public class MszStageParamService {
-  //todo: mock. replace with REST
-  private final ArrayList<MszStageParam> mock = new ArrayList<>();
+  public List<MszStageParam> findAllByMszStageId(String mszStageId) {
+    //todo: APPOLO!
+    return List.of();
+  }
+
+  public MszStageParam create(final String mszStageId,
+                              final BzMszStageParam bzMszStageParam,
+                              final Object value) {
+    final MszStageParam mszStageParam = new MszStageParam();
+    mszStageParam.setId(UUID.randomUUID().toString());
+    mszStageParam.setMszStageId(mszStageId);
+    mszStageParam.setBzMszStageParamId(bzMszStageParam.getId());
+    mszStageParam.setValue(value);
+    return mszStageParam;
+  }
 
   public void saveAll(final List<MszStageParam> list) {
     for (MszStageParam mszStageParam : list) {
@@ -18,15 +32,6 @@ public class MszStageParamService {
   }
 
   public void save(MszStageParam mszStageParam) {
-    //todo:
-  }
-
-  public List<MszStageParam> findAllByMszStage(MszStage mszStage) {
-    //todo:
-    return List.of();
-  }
-
-  public MszStageParam create(BzMszStageParam bzMszStageParam) {
-    return null;
+    log.info("SAVING MszStageParam " + mszStageParam);
   }
 }

@@ -4,7 +4,6 @@ import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
-import ecp.zhs.Output;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.MszTransitionQuery;
@@ -14,7 +13,6 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 public class BzMszTransitionService {
@@ -24,12 +22,6 @@ public class BzMszTransitionService {
   public BzMszTransitionService(ApolloClient apolloClient) {
     this.apolloClient = apolloClient;
     updateConfig();
-  }
-
-  @Nonnull
-  public Optional<BzMszTransition> findByOutput(Output output) {
-    final String outputId = output.getOutputId();
-    return Optional.of(MAP_OUTPUT_ID.get(outputId));
   }
 
   @Nonnull

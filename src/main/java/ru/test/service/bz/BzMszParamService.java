@@ -4,50 +4,37 @@ import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
-import ecp.zhs.Output;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.MszStageParamQuery;
 import ru.test.mock.bz.BzMszStageParam;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
-public class BzMszStageParamService {
-  private static final Map<String, BzMszStageParam> MAP = new HashMap<>();
+public class BzMszParamService {
+  private static final Map<String, BzMszStageParam> MAP_OUTPUT_ID = new HashMap<>();
+  private static final Map<String, List<BzMszStageParam>> MAP_TO_BZ_MSZ_STAGE_ID = new HashMap<>();
   private final ApolloClient apolloClient;
 
-  public BzMszStageParamService(final ApolloClient apolloClient) {
+  public BzMszParamService(final ApolloClient apolloClient) {
     this.apolloClient = apolloClient;
     updateConfig();
   }
 
-  @Nonnull
-  public Optional<BzMszStageParam> findByOutput(final Output output) {
-    return findByOutputId(output.getOutputId());
+  public List<BzMszStageParam> getAllByMszStage(final String mszStageParamId) {
+    return MAP_TO_BZ_MSZ_STAGE_ID.get(mszStageParamId);
   }
 
-  public Optional<BzMszStageParam> findByOutputId(final String outputId) {
-    return Optional.of(MAP.get(outputId));
-  }
-
-  @Nonnull
-  public Collection<BzMszStageParam> getAll() {
-    return MAP.values();
-  }
-
-  public List<BzMszStageParam> getAllByMszStage(final String toBzMszStageId) {
-    return MAP.values()
-              .stream()
-              .filter(bzMszStageParam -> bzMszStageParam.getBzMszStageId().equals(toBzMszStageId))
-              .collect(Collectors.toList());
-  }
+//  @Nonnull
+//  public Collection<BzMszStageParam> getAll() {
+//    return MAP_OUTPUT_ID.values();
+//  }
 
   private void updateConfig() {
     final ApolloCall.Callback<MszStageParamQuery.Data> callback = new ApolloCall.Callback<>() {
@@ -63,7 +50,10 @@ public class BzMszStageParamService {
             bzMszStageParam.setTitle(measureStepParameter.title());
             bzMszStageParam.setType(measureStepParameter.code());
 
-            MAP.put(bzMszStageParam.getOutputId(), bzMszStageParam);
+            MAP_OUTPUT_ID.put(bzMszStageParam.getOutputId(), bzMszStageParam);
+
+            MAP_TO_BZ_MSZ_STAGE_ID.computeIfAbsent(bzMszStageParam.getBzMszStageId(), k -> new ArrayList<>());
+            MAP_TO_BZ_MSZ_STAGE_ID.get(bzMszStageParam.getBzMszStageId()).add(bzMszStageParam);
           }
         }
       }

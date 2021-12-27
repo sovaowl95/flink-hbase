@@ -12,7 +12,7 @@ import ru.test.mock.bz.BzMszStageParam;
 import ru.test.mock.hbase.Msz;
 import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
-import ru.test.service.bz.BzMszStageParamService;
+import ru.test.service.bz.BzMszParamService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;
 
@@ -22,50 +22,54 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class Param {
   private final MszStageService mszStageService;
   private final MszStageParamService mszStageParamService;
 
-  private final BzMszStageParamService bzMszStageParamService;
+  private final BzMszParamService bzMszParamService;
 
 
-  public List<MszStageParam> updateParams(final Map<String, Output> outputsMap,
+  //force - флаг, который указывает на то, что все параметры должны быть обновлены
+  public List<MszStageParam> updateParams(@Nonnull final Map<String, Output> outputsMap,
                                           @Nonnull final Msz msz,
                                           @Nonnull final Set<String> changedOutputs,
                                           final boolean force) {
     var savable = new ArrayList<MszStageParam>();
-    final Optional<MszStage> mszStageOptional = mszStageService.findByMsz(msz);
-    //if(mszStageOptional.isPresent())//todo:
-    final MszStage mszStage = mszStageOptional.get();
-//    final List<MszStageParam> allParams = mszStageParamService.findAllByMszStage(mszStage);
 
-    for (BzMszStageParam bzMszStageParam : bzMszStageParamService.getAll()) {
+    final Optional<MszStage> mszStageOptional = mszStageService.findByMszId(msz.getId());
+    if (mszStageOptional.isEmpty()) {
+      throw new RuntimeException("msz without stage!");
+    }
+    final MszStage mszStage = mszStageOptional.get();
+
+    //получить все параметры этого MSZ
+    for (BzMszStageParam bzMszStageParam : bzMszParamService.getAllByMszStage(mszStage.getId())) {
       final String outputId = bzMszStageParam.getOutputId();
       final Output output = outputsMap.get(outputId);
 
-      if (force || changedOutputs.contains(outputId)) {
-        if (output == null) {
-          throw new RuntimeException("Output not found");
-        }
+      if (force && output == null) {
+        throw new RuntimeException("Output not found, but must be present");
+      }
 
-        if (output != null /* && output.valueChanged */) { //todo:
-          final Any anyValue = output.getValue();
-          final Object valueUnpacked = unpack(anyValue, bzMszStageParam.getType());
-          //в протобафе есть wrappers.proto
+      //если значение не поменялось, то всё ок
+      if (output == null) {
+        continue;
+      }
 
-          final MszStageParam mszStageParam = new MszStageParam();
-          mszStageParam.setId(UUID.randomUUID().toString());
-          mszStageParam.setMszStageId(mszStage.getId());
-          mszStageParam.setBzMszStageParamId(bzMszStageParam.getId());
-          mszStageParam.setValue(valueUnpacked);
+      //если значение изменено или это НАСИЛЬНОЕ обновление :D
+      if (changedOutputs.contains(outputId) || force) {
+        final Object valueUnpacked = unpack(output.getValue(),
+                                            bzMszStageParam.getType());
 
-          savable.add(mszStageParam);
-        }
+        final MszStageParam mszStageParam = mszStageParamService.create(mszStage.getId(),
+                                                                        bzMszStageParam,
+                                                                        valueUnpacked);
+        savable.add(mszStageParam);
       }
     }
+
     return savable;
   }
 

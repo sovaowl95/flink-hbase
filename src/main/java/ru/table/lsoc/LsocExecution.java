@@ -1,4 +1,4 @@
-package ru.table.lsoc;
-
-public class LsocExecution {
-}
+//package ru.table.lsoc;
+//
+//public class LsocExecution {
+//}

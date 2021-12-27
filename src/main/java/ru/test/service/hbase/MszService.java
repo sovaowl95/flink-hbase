@@ -1,14 +1,17 @@
 package ru.test.service.hbase;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.test.mock.Constants;
 import ru.test.mock.bz.BzMsz;
 import ru.test.mock.hbase.Msz;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 public class MszService {
   //todo: mock. replace with REST
   private final ArrayList<Msz> mock = new ArrayList<>();
@@ -59,7 +62,24 @@ public class MszService {
     return objectObjectHashMap;
   }
 
-  public void save(Msz msz){
-    //todo:
+
+  public HashMap<BzMsz, Msz> createMszMap(final String personId,
+                                          final Collection<BzMsz> bzMszCollection) {
+    final Map<String, Msz> currentMsz = findAllKeyBzMszId(personId);
+
+    final HashMap<BzMsz, Msz> map = new HashMap<>();
+    for (BzMsz bzMsz : bzMszCollection) {
+      map.put(bzMsz, currentMsz.getOrDefault(bzMsz.getId(), null));
+    }
+    return map;
+  }
+
+  //todo:??
+  public Msz create() {
+    return new Msz();
+  }
+
+  public void save(Msz msz) {
+    log.info("SAVING Msz " + msz);
   }
 }

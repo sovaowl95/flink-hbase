@@ -1,4 +1,4 @@
-package ru.table.lsoc;
-
-public class LsocInputData {
-}
+//package ru.table.lsoc;
+//
+//public class LsocInputData {
+//}

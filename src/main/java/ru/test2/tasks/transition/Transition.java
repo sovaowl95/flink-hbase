@@ -11,11 +11,11 @@ import ru.test.mock.bz.BzMszTransition;
 import ru.test.mock.hbase.Msz;
 import ru.test.mock.hbase.MszStage;
 import ru.test.mock.hbase.MszStageParam;
-import ru.test.service.bz.BzMszStageParamService;
+import ru.test.service.bz.BzMszParamService;
 import ru.test.service.bz.BzMszTransitionService;
 import ru.test.service.hbase.MszStageParamService;
 import ru.test.service.hbase.MszStageService;
-import ru.test2.tasks.transition.dto.TransitionSaveDto;
+import ru.test2.dto.TransitionSaveDto;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,8 +33,8 @@ public class Transition {
   private final MszStageService mszStageService;
   private final MszStageParamService mszStageParamService;
 
+  private final BzMszParamService bzMszParamService;
   private final BzMszTransitionService bzMszTransitionService;
-  private final BzMszStageParamService bzMszStageParamService;
 
   @SneakyThrows
   public List<TransitionSaveDto> transition(final Map<String, Output> outputsMap,
@@ -43,6 +43,7 @@ public class Transition {
                                             final BzMsz bzMsz) {
 
     var res = new ArrayList<TransitionSaveDto>();
+
     final Optional<MszStage> mszStageOptional = mszStageService.findByMszOptional(msz);
 
     final Set<BzMszTransition> possibleTransition
@@ -106,7 +107,7 @@ public class Transition {
     transitionSaveDto.setMszStage(mszStage);
 
     //проверить, что все параметры представлены
-    final List<BzMszStageParam> bzMszStageParams = bzMszStageParamService.getAllByMszStage(toBzMszStageId);
+    final List<BzMszStageParam> bzMszStageParams = bzMszParamService.getAllByMszStage(toBzMszStageId);
     for (BzMszStageParam bzMszStageParam : bzMszStageParams) {
       if (outputsMap.get(bzMszStageParam.getOutputId()) == null) {
         throw new RuntimeException("parameter not present");

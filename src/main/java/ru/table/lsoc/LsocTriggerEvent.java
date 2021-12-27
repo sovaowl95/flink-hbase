@@ -1,4 +1,4 @@
-package ru.table.lsoc;
-
-public class LsocTriggerEvent {
-}
+//package ru.table.lsoc;
+//
+//public class LsocTriggerEvent {
+//}
