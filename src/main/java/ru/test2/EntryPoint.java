@@ -5,11 +5,16 @@ import ecp.zhs.WaveStateUpdate;
 import lombok.RequiredArgsConstructor;
 import ru.test.mock.bz.BzMsz;
 import ru.test.mock.hbase.Msz;
+import ru.test.mock.hbase.MszStageParam;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.hbase.MszService;
-import ru.test2.tasks.Param;
+import ru.test.service.hbase.MszStageParamService;
+import ru.test.service.hbase.MszStageService;
+import ru.test2.tasks.param.Param;
 import ru.test2.tasks.transition.Transition;
+import ru.test2.tasks.transition.dto.TransitionSaveDto;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,54 +23,69 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EntryPoint {
   private final MszService mszService;
-//
+  private final MszStageService mszStageService;
+  private final MszStageParamService mszStageParamService;
+
   private final BzMszService bzMszService;
-//  private final BzMszStageService bzMszStageService;
-//  private final BzMszStageParamService bzMszStageParamService;
-//  private final BzMszTransitionStagesService bzMszTransitionStagesService;
+
 
   private final Param param;
   private final Transition transition;
 
   public void go(final String personId,
-                 final WaveStateUpdate waveStateUpdate) throws Exception {
-    String outputId = "";
-    var changedOutputs = waveStateUpdate.getWaveState().getExecutionsList()
-                                        .stream()
-                                        .flatMap(x -> x.getNewOutputVersionsList()
-                                                       .stream()
-                                                       .map(o -> o.getOutputId()))
-                                        .collect(Collectors.toSet());
-    var isOutputChanged = changedOutputs.contains(outputId);
+                 final WaveStateUpdate waveStateUpdate) {
+    final Map<String, Output> outputsMap = waveStateUpdate.getAllOutputs().getOutputsMap();
+    final var changedOutputs = waveStateUpdate.getWaveState().getExecutionsList()
+                                              .stream()
+                                              .flatMap(x -> x.getNewOutputVersionsList()
+                                                             .stream()
+                                                             .map(Output::getOutputId))
+                                              .collect(Collectors.toSet());
+    final HashMap<BzMsz, Msz> map = createMap(personId);
 
-    final Map<String, Output> outputsMap = waveStateUpdate.getAllOutputs().getOutputsMap(); //todo: проверить
 
-    final List<Msz> currentMsz = mszService.findAllHumanMsz(personId);
-//    final List<MszStage> currentStages = mszStageService.findByMsz(currentMsz);
-
-    final HashMap<BzMsz, Msz> map = createMap(currentMsz);
+    List<MszStageParam> save1 = null;
+    List<TransitionSaveDto> save2 = null;
 
     for (Map.Entry<BzMsz, Msz> entry : map.entrySet()) {
-      //todo: загружаем из ЖС экземпляр этой мсз... ноо.... мы же уже загрузили
       final BzMsz bzMsz = entry.getKey();
       final Msz msz = entry.getValue();
 
       if (msz != null) {
-        param.updateParams(outputsMap, msz, false);
+        save1 = param.updateParams(outputsMap, msz, changedOutputs, false);
       }
-      transition.transition(outputsMap, msz, personId, bzMsz);
+      save2 = transition.transition(outputsMap, msz, personId, bzMsz);
+    }
+
+    saveAll(save1, save2);
+  }
+
+  private void saveAll(@Nullable final List<MszStageParam> save1,
+                       @Nullable final List<TransitionSaveDto> save2) {
+    if (save1 != null) {
+      for (MszStageParam mszStageParam : save1) {
+        mszStageParamService.save(mszStageParam);
+      }
+    }
+
+    if (save2 != null) {
+      for (TransitionSaveDto transitionSaveDto : save2) {
+        if (transitionSaveDto.getMsz() != null) {
+          mszService.save(transitionSaveDto.getMsz());
+        }
+
+        mszStageService.save(transitionSaveDto.getMszStage());
+        mszStageParamService.saveAll(transitionSaveDto.getParamList());
+      }
     }
   }
 
-  private HashMap<BzMsz, Msz> createMap(final List<Msz> currentMsz) {
-    final HashMap<BzMsz, Msz> map = new HashMap<>(); //todo: @EqualsAndHashCode
+  private HashMap<BzMsz, Msz> createMap(final String personId) {
+    final Map<String, Msz> currentMsz = mszService.findAllKeyBzMszId(personId);
+
+    final HashMap<BzMsz, Msz> map = new HashMap<>();
     for (BzMsz bzMsz : bzMszService.getAll()) {
-      //todo: O(1)
-      final Msz msz = currentMsz.stream()
-                                .filter(mszCurr -> mszCurr.getBzMszId().equals(bzMsz.getId()))
-                                .findFirst()
-                                .orElse(null);
-      map.put(bzMsz, msz);
+      map.put(bzMsz, currentMsz.getOrDefault(bzMsz.getId(), null));
     }
     return map;
   }

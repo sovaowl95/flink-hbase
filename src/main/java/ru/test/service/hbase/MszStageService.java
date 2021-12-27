@@ -51,6 +51,7 @@ public class MszStageService {
     return Optional.empty();
   }
 
+  //todo: refactoring
   public MszStage createMszStage(final BzMszTransition bzMszTransition,
                                  final BzMszStage bzMszStage,
                                  final Msz msz) {
@@ -59,7 +60,6 @@ public class MszStageService {
     mszStage.setMszId(msz.getId());
     mszStage.setBzMszTransactionStagesId(bzMszTransition.getId());
     mszStage.setBzMszStageId(bzMszStage.getId());
-    save(mszStage);
     return mszStage;
   }
 

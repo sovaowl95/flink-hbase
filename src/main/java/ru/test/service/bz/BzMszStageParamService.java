@@ -13,26 +13,40 @@ import ru.test.mock.bz.BzMszStageParam;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class BzMszStageParamService {
   private static final Map<String, BzMszStageParam> MAP = new HashMap<>();
   private final ApolloClient apolloClient;
 
-  public BzMszStageParamService(ApolloClient apolloClient) {
+  public BzMszStageParamService(final ApolloClient apolloClient) {
     this.apolloClient = apolloClient;
     updateConfig();
   }
 
   @Nonnull
-  public Optional<BzMszStageParam> findByOutput(Output output) {
+  public Optional<BzMszStageParam> findByOutput(final Output output) {
     return findByOutputId(output.getOutputId());
   }
 
   public Optional<BzMszStageParam> findByOutputId(final String outputId) {
     return Optional.of(MAP.get(outputId));
+  }
+
+  @Nonnull
+  public Collection<BzMszStageParam> getAll() {
+    return MAP.values();
+  }
+
+  public List<BzMszStageParam> getAllByMszStage(final String toBzMszStageId) {
+    return MAP.values()
+              .stream()
+              .filter(bzMszStageParam -> bzMszStageParam.getBzMszStageId().equals(toBzMszStageId))
+              .collect(Collectors.toList());
   }
 
   private void updateConfig() {
@@ -62,10 +76,5 @@ public class BzMszStageParamService {
 
     apolloClient.query(ru.MszStageParamQuery.builder().build())
                 .enqueue(callback);
-  }
-
-  @Nonnull
-  public Collection<BzMszStageParam> getAll() {
-    return MAP.values();
   }
 }

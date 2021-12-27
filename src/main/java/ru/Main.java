@@ -3,6 +3,10 @@ package ru;
 
 import com.apollographql.apollo.ApolloClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hadoop.conf.Configuration;
+import ru.client.HBaseClientV2;
+import ru.config.Hbase;
+import ru.migration.MigrationService;
 import ru.test.service.bz.BzMszService;
 import ru.test.service.bz.BzMszStageParamService;
 import ru.test.service.bz.BzMszStageService;
@@ -15,18 +19,15 @@ public class Main {
   public static final String HTTP_LOCALHOST_8080_GRAPHQL = "http://localhost:8080/graphql";
 
   public static void main(String[] args) throws Exception {
-//    final Configuration configuration = Hbase.createConfiguration();
-//
-//    final HBaseClientV2 hBaseClientV2 = new HBaseClientV2(configuration);
-//
-//    MigrationService.migrate(hBaseClientV2);
+    final Configuration configuration = Hbase.createConfiguration();
+
+    final HBaseClientV2 hBaseClientV2 = new HBaseClientV2(configuration);
+
+    MigrationService.migrate(hBaseClientV2);
 
     final ApolloClient apolloClient = ApolloClient.builder()
                                                   .serverUrl(HTTP_LOCALHOST_8080_GRAPHQL)
                                                   .build();
-
-
-
 
     final BzMszService bzMszService = new BzMszService(apolloClient);
     final BzMszStageService bzMszStageService = new BzMszStageService(apolloClient);

@@ -5,9 +5,9 @@ import ru.test.mock.bz.BzMsz;
 import ru.test.mock.hbase.Msz;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class MszService {
   //todo: mock. replace with REST
@@ -48,9 +48,18 @@ public class MszService {
     return Optional.empty();
   }
 
-  public List<Msz> findAllHumanMsz(String humanId) {
-    return mock.stream()
-               .filter(msz -> msz.getPersonId().equals(humanId))
-               .collect(Collectors.toList());
+  public Map<String, Msz> findAllKeyBzMszId(String humanId) {
+    final HashMap<String, Msz> objectObjectHashMap = new HashMap<>();
+    for (final Msz msz : mock) {
+      if (msz.getPersonId().equals(humanId)) {
+        objectObjectHashMap.put(msz.getBzMszId(), msz);
+      }
+    }
+
+    return objectObjectHashMap;
+  }
+
+  public void save(Msz msz){
+    //todo:
   }
 }
